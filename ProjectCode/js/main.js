@@ -33,6 +33,13 @@ class MainGraph {
       this.yScale.domain(d3.extent(this.data.map(d=>+d[yVar])))
       this.main.append("g").attr('class', 'yAxis').call(d3.axisLeft(this.yScale))
 
+      let Tooltip = d3.select('#one')
+      .append('div')
+      .attr('class', 'tooltip')
+      .style('background-color', 'lightgrey')
+      .style('position', 'absolute')
+      .style('visibility', 'hidden')
+
       let dots = this.main.append('g')
       .selectAll("dot") 
       .data(this.data)
@@ -42,6 +49,20 @@ class MainGraph {
         .attr("cy", d=> this.yScale(+d[yVar]) )
         .attr("r", 3)
         .attr("fill", "#69b3a2")
+        .on('mouseover', function(d,i){
+          console.log(d,i)
+            Tooltip.style('visibility', 'visible')
+            .html(i.track_name + '</br>' + i.artist_names)
+            .style('text-transform', 'capitalize')
+        })
+        .on('mousemove', function(d){
+          Tooltip.style('top', d.pageY -10 + 'px')
+          .style('left', d.pageX + 10 + 'px')
+        })
+        .on('mouseout', function(d){
+          Tooltip
+          .style("visibility", 'hidden') 
+        })
     }
 
 }
