@@ -25,7 +25,7 @@
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization' : 'Bearer BQDWfgQ82iffHcQWhii6-iN7rGdlGvdOBu5e-YNaSVhONym66BlPvYxd0jYbp4z8gmV-fdhWKpVYRyHojQzXW4Lm2y_1E7b6s4UB8nEjqm-BbxfjbLiVPVGWLVhLizCOeFCDAyXBjM9nnnlawb0x2n4IMZPuJm22pX53M4_SDD3dS1FryK9qrIJOOhK0adYGLmc'
+          'Authorization' : 'Bearer '
         },
       }).then(function(response) {
         return response.json();
@@ -87,7 +87,7 @@
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization' : 'Bearer BQAxOrpvxD987H-9P70ffAi8LIIxzdBAZ3KfbHQrsRigxAw-XVsgZ-IFqaU-KFc8CZ6PwkGBNaY02X1gVOeo-FDc1KCZriLHsBzs-hQ60r91uDgEqckyepUXAtAmjgGP9PLiJDdQK2-cfKdBF9BTx-6rBDZQFmGrx0mPj1NGwy8NA1COzXMACNgsbpiO1ShuYYA'
+          'Authorization' : 'Bearer YA'
         },
       }).then(function(response) {
         return response.json();
