@@ -45,7 +45,7 @@ class HeatMap {
       "T25",
     ];
 
-    let attributes = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"];
+    let attributes = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9"];
 
     //Axis
     let x = d3
@@ -62,23 +62,33 @@ class HeatMap {
     //pulling a slice for rn, not sure how this works now with the data handling....
     //Should match whatever is in the table
     let selection = this.data.slice(0, 25);
-    console.log("selection is:" + selection);
+    console.log(selection[0]);
 
     //Color scales
     let colorRange = ["white", "#69b3a2"];
 
-    // //determine min/max for bpm and loudness scales
-    // let [bpmMIN, bpmMAX] = d3.extent(
-    //   selection.map((d) => parseFloat(d["tempo"]))
-    // );
-    // let [loudMIN, loudMAX] = d3.extent(
-    //   selection.map((d) => parseFloat(d["loudness"]))
-    // );
+    //determine min/max for bpm, loudness and duration scales
+    let [bpmMIN, bpmMAX] = d3.extent(
+      selection.map((d) => parseFloat(d["bpm"]))
+    );
+    let [loudMIN, loudMAX] = d3.extent(
+      selection.map((d) => parseFloat(d["loudness"]))
+    );
+    let [lengthMIN, lengthMAX] = d3.extent(
+      selection.map((d) => parseInt(d["duration_ms"]))
+    );
 
     //attribute scales
     let attrColor = d3.scaleLinear().range(colorRange).domain([0, 1]);
-    // let bmpColor = d3.scaleLinear().range(colorRange).domain([bpmMIN, bpmMAX]);
-    // let loudColor = d3.scaleLinear().range(colorRange).domain([loudMIN, loudMAX]);
+    let bmpColor = d3.scaleLinear().range(colorRange).domain([bpmMIN, bpmMAX]);
+    let loudColor = d3
+      .scaleLinear()
+      .range(colorRange)
+      .domain([loudMIN, loudMAX]);
+    let lengthColor = d3
+      .scaleLinear()
+      .range(colorRange)
+      .domain([lengthMIN, lengthMAX]);
 
     let Tooltip = d3
       .select("#three")
@@ -88,9 +98,12 @@ class HeatMap {
       .style("position", "absolute")
       .style("visibility", "hidden");
 
+    let mappedData = this.mapData(selection);
+    console.log(mappedData);
+
     heatmap
       .selectAll()
-      .data(this.data)
+      .data(mappedData)
       .enter()
       .append("rect")
       .attr("y", (d) => y(d[0]))
@@ -98,18 +111,42 @@ class HeatMap {
       .attr("height", y.bandwidth())
       .attr("width", x.bandwidth())
       .attr("fill", (d) => {
-        if (d[1] === "A8") {
+        if (d[1] === "A7") {
           return bmpColor(d[2]);
-        } else if (d[1] === "A6") {
+        } else if (d[1] === "A8") {
           return loudColor(d[2]);
+        } else if (d[1] === "A9") {
+          return lengthColor(d[2]);
         } else {
           return attrColor(d[2]);
         }
       })
       .on("mouseover", function (d, i) {
-        // console.log(d,i)
         Tooltip.style("visibility", "visible")
-          .html(i[1] + ":" + i[2] + "</br>" + i[3] + "</br>" + i[4])
+          //.text(d => {if (i[1] === "A1"){return "Dance"}})
+          .html((d) => {
+            let title = "";
+            if (i[1] === "A1") {
+              title = "Danceability";
+            } else if (i[1] === "A2") {
+              title = "Energy";
+            } else if (i[1] === "A3") {
+              title = "Instrumentalness";
+            } else if (i[1] === "A4") {
+              title = "Liveness";
+            } else if (i[1] === "A5") {
+              title = "Speechiness";
+            } else if (i[1] === "A6") {
+              title = "Valence";
+            } else if (i[1] === "A7") {
+              title = "BPM";
+            } else if (i[1] === "A8") {
+              title = "Loudness";
+            } else if (i[1] === "A9") {
+              title = "Duration";
+            }
+            return i[3] + "</br>" + i[4] + "</br>" + title + ":" + i[2];
+          })
           .style("text-transform", "capitalize");
       })
       .on("mousemove", function (d) {
@@ -121,6 +158,77 @@ class HeatMap {
       .on("mouseout", function (d) {
         Tooltip.style("visibility", "hidden");
       });
+  }
+
+  mapData(data) {
+    //given data selection, map it to format that can be used for the heatmap easier...
+    let mapData = [];
+    for (let [i, track] of data.entries()) {
+      mapData.push([
+        `T${i + 1}`,
+        "A1",
+        parseFloat(track.danceability),
+        track.name,
+        track.artist,
+      ]);
+      mapData.push([
+        `T${i + 1}`,
+        "A2",
+        parseFloat(track.energy),
+        track.name,
+        track.artist,
+      ]);
+      mapData.push([
+        `T${i + 1}`,
+        "A3",
+        parseFloat(track.instrumentalness),
+        track.name,
+        track.artist,
+      ]);
+      mapData.push([
+        `T${i + 1}`,
+        "A4",
+        parseFloat(track.liveness),
+        track.name,
+        track.artist,
+      ]);
+      mapData.push([
+        `T${i + 1}`,
+        "A5",
+        parseFloat(track.speechiness),
+        track.name,
+        track.artist,
+      ]);
+      mapData.push([
+        `T${i + 1}`,
+        "A6",
+        parseFloat(track.valence),
+        track.name,
+        track.artist,
+      ]);
+      mapData.push([
+        `T${i + 1}`,
+        "A7",
+        parseFloat(track.bpm),
+        track.name,
+        track.artist,
+      ]);
+      mapData.push([
+        `T${i + 1}`,
+        "A8",
+        parseFloat(track.loudness),
+        track.name,
+        track.artist,
+      ]);
+      mapData.push([
+        `T${i + 1}`,
+        "A9",
+        parseFloat(track.duration_ms),
+        track.name,
+        track.artist,
+      ]);
+    }
+    return mapData;
   }
   updateTable() {}
 }
