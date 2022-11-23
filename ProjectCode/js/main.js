@@ -50,12 +50,8 @@ class MainGraph {
         .attr("cx", d=>this.xScale(+d['track_pop']))
         .attr("cy", d=> this.yScale(+d[yVar]) )
         .attr("r", 4)
-        .attr("fill", function(d){
-          if(d['app'] == 'tiktok')
-            return "#69b3a2"
-          else 
-          return '#ac87ff'
-          })
+        .attr("fill", d=> d['app'] == 'tiktok' ? "#69b3a2" : '#ac87ff')
+        .attr('opacity', '.6')
         .on('mouseover', function(d,i){
 
             Tooltip.style('visibility', 'visible')
@@ -86,21 +82,20 @@ class MainGraph {
    //   console.log(globalApplicationState.brushedData)
     }
     highlighting(selected, i){
-      console.log(i)
-      let hdata = this.data.filter(function(d){return d.camelot== i.key})
+
       if(selected){
-        let hdata = this.data.filter(function(d){return d.camelot== i.key})
-        console.log(hdata)
-        d3.selectAll('circle').data(hdata).attr('stroke', 'red')
+        d3.selectAll('circle').attr('opacity', '.6')
+        d3.selectAll('circle').filter(d=> d['camelot'] == i.key)
+          .attr('fill', i.color).attr('stroke', 'black').attr('opacity', '1')
       }
+
       else{
-        let hdata = this.data.filter(function(d){return d.camelot== i.key})
-        console.log('deselect', hdata)
-        d3.selectAll('circle').data(hdata).attr('stroke', 'black')
+        console.log(selected)
+        d3.selectAll('circle').filter(d=> d['camelot'] == i.key)
+          .attr('stroke', 'none').attr('fill',  d=> d['app'] == 'tiktok' ? "#69b3a2" : '#ac87ff').attr('opacity', '.6')
       }
       //let i = d3.selectAll('.cselected').property('cselected', true)
-      console.log(i.key)
-     
+
      // d3.selectAll('circle').data(highlightdata).attr('stroke', 'red').raise()
      
    //  d3.selectAll('circle')

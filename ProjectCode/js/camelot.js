@@ -76,7 +76,7 @@ class CamelotWheel {
      // Add 100 on Y translation, cause upper bars are longer
    
       if(ischecked){
-
+        d3.selectAll('.slabel').remove()
        let adata = data.filter(function(d){return d.key.match('A')})
        let bdata = data.filter(function(d){return d.key.match('B')})
 
@@ -99,7 +99,7 @@ class CamelotWheel {
         .range([110, 1])
         .domain([0,d3.max(data.map(d=>d['1']))])
       
-        this.camelot.append('g')
+      this.camelot.append('g')
         .selectAll('path')
         .data(data)
         .enter()
@@ -112,18 +112,36 @@ class CamelotWheel {
           .endAngle(d=> d.key.match('A') ? axScale(d.key) + axScale.bandwidth() : bxScale(d.key) + bxScale.bandwidth())
           .padAngle(.01)
           .padRadius(80)
-        ).attr('class', 'dual')
-        this.camelot.selectAll('path').transition().duration(500).attr('d', d3.arc()
+        )
+        .attr('class', 'dual')
+      this.camelot.selectAll('path').transition().duration(500).attr('d', d3.arc()
         .innerRadius( d=> d.key.match('A') ? 115: byScale(0))
         .outerRadius( d=> d.key.match('A') ? ayScale(d['1']) : byScale(d['1']))
         .startAngle(d=> d.key.match('A') ? axScale(d.key) : bxScale(d.key))
         .endAngle(d=> d.key.match('A') ? axScale(d.key) + axScale.bandwidth() : bxScale(d.key) + bxScale.bandwidth())
         .padAngle(.01)
         .padRadius(80)
-      ).attr('class', 'dual')
-      }
+      )
+      .attr('class', 'dual')
+
+      this.camelot.append('g')
+        .selectAll('g')
+        .data(data)
+        .enter()
+        .append('g')
+          .attr('text-anchor', d=> d.key.match('A') ? (axScale(d.key) + axScale.bandwidth() /2 + Math.PI) % (2* Math.PI) < Math.PI ? 'end': 'start' :(bxScale(d.key) + bxScale.bandwidth() /2 + Math.PI) % (2* Math.PI) < Math.PI ? 'end': 'start')  
+          .attr('transform', d=> d.key.match('A') ? "rotate(" + ((axScale(d.key) + axScale.bandwidth()/2) * 180 / Math.PI - 90) + ")" + "translate(" + (120) + ",0)" : "rotate(" + ((bxScale(d.key) + bxScale.bandwidth()/2) * 180 / Math.PI - 90) + ")" + "translate(" + (90) + ",0)" )
+        .append('text')
+          .text(d=> d.key)
+          .attr('transform', d=>d.key.match('A') ? (axScale(d.key) + axScale.bandwidth() /2 + Math.PI) %(2*Math.PI) < Math.PI  ? "rotate(180)" : "rotate(0)" :(bxScale(d.key) + bxScale.bandwidth() /2 + Math.PI) %(2*Math.PI) < Math.PI  ? "rotate(180)" : "rotate(0)" )
+          .attr('alignment-baseline', 'middle').attr('class', 'dlabel')
+     
+        }
+
+
      else{
       d3.selectAll('.dual').remove()
+      d3.selectAll('.dlabel').remove()
       let singleData = data.sort(function(a,b){return d3.ascending(a.key, b.key)})
       let xScale = d3.scaleBand()
       .range([0,2*Math.PI])
@@ -158,6 +176,17 @@ class CamelotWheel {
       .padAngle(.01)
       .padRadius(80)
     )
+    this.camelot.append('g')
+    .selectAll('g')
+    .data(data)
+    .enter()
+    .append('g')
+      .attr('text-anchor', d=> (xScale(d.key) + xScale.bandwidth() /2 + Math.PI) % (2* Math.PI) < Math.PI ? 'end': 'start')  
+      .attr('transform', d=>  "rotate(" + ((xScale(d.key) + xScale.bandwidth()/2) * 180 / Math.PI - 90) + ")" + "translate(" + (yScale(d['1'])-30) + ",0)")
+    .append('text')
+      .text(d=> d.key)
+      .attr('transform', d=> (xScale(d.key) + xScale.bandwidth() /2 + Math.PI) %(2*Math.PI) < Math.PI  ? "rotate(180)" : 'rotate(0)')
+      .attr('alignment-baseline', 'middle').attr('class', 'slabel')
      
       }
      
