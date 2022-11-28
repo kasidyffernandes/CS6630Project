@@ -35,3 +35,18 @@
 tr:nth-of-type(2n){
       background-color: lightgrey;
 }
+.title{
+      font-size: 24px;
+      font-weight: bold;
+      text-anchor: middle;
+}
+.legend{
+      font-size: 10.5px;
+      text-anchor: middle;
+}
+.reset{
+      font-size: 10.5px;
+      text-anchor: middle;
+      fill: red;
+      font-weight: bold;
+}

@@ -15,33 +15,140 @@ class MainGraph {
           .attr("style", "outline: thin solid black;") 
         .append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+      
+      this.main.append('text')
+        .attr('class', 'title')
+        .attr('transform', "translate(400,0)")
+        .attr('text-anchor', 'middle')
+        .text('Top Song 2022')
+
+      this.main.append('text')
+        .attr("transform", "translate(" + width/2 + ",400)")
+        .attr('text-anchor', 'middle')
+        .text("Popularity Score")
+        this.colorScale = function(d){
+          let object = {};
+          this.result = [];
+          globalApplicationState.data.forEach(function(item){
+            if(!object[item.url])
+              object[item.url] = 0;
+              object[item.url] += 1;
+            })
+          for (let prop in object){
+            if(object[prop] >=2){
+              this.result.push(prop);
+            }}
+            if(this.result.includes(d['url'])){
+              return 'black'
+            }else{
+              if(d['app'] == 'tiktok'){
+                return "#69b3a2"
+              }else{return "#ac87ff"}
+            }
+        }
+      this.main.append('text')
+        .attr('class', 'legend')
+        .attr('transform', 'translate(' + width + ',-15)')
+        .attr('fill',"#ac87ff" )
+        .text('Spotify')
+        .on('mouseover', function(d){
+          d3.selectAll('circle').filter(d=>d['app'] == 'spotify').transition().attr('opacity', 1)
+        })
+        .on('mouseout', function(d){
+          d3.selectAll('circle').filter(d=>d['app'] == 'spotify').transition().attr('opacity', .6)
+        })
+        .on('click', function(d){
+          console.log('spot')
+          let copacity= parseFloat(d3.selectAll('circle').filter(d=>[d.app] == 'spotify').attr('opacity'))
+          if(copacity > 0){
+            d3.select('.reset').attr('visibility', 'visible')
+            d3.selectAll('circle').filter(d=>d['app'] != 'spotify').transition().attr('opacity', 0)
+            d3.selectAll('circle').filter(d=>d['app'] == 'spotify').transition().attr('opacity', .6).attr('fill', '#ac87ff')
+          }
+        })
+
+      this.main.append('text')
+        .attr('class', 'legend')
+        .attr('transform', 'translate(' + width + ',0)')
+        .attr('fill',"#69b3a2" )
+        .text('TikTok') 
+        .on('mouseover', function(d){
+          d3.selectAll('circle').filter(d=>d['app'] == 'tiktok').transition().attr('opacity', 1)
+        })
+        .on('mouseout', function(d){
+          d3.selectAll('circle').filter(d=>d['app'] == 'tiktok').transition().attr('opacity', .6)
+        }) 
+        .on('click', function(d){
+          let copacity= parseFloat(d3.selectAll('circle').filter(d=>[d.app] == 'tiktok').attr('opacity'))
+          if(copacity > 0){
+            d3.select('.reset').attr('visibility', 'visible')
+            d3.selectAll('circle').filter(d=>d['app'] != 'tiktok').transition().attr('opacity', 0)
+            d3.selectAll('circle').filter(d=>d['app'] == 'tiktok').transition().attr('opacity', .6).attr('fill',  "#69b3a2")
+          }
+        })
+
+      this.main.append('text')
+        .attr('class', 'legend')
+        .attr('transform', 'translate(' + width + ',15)')
+        .attr('fill', "black" )
+        .text('Both')
+        .on('click', function(d){
+          d3.select('.reset').attr('visibility', 'visible')
+          d3.selectAll("circle[fill='black']").transition().attr('opacity', .6)
+          d3.selectAll("circle:not([fill='black'])").transition().attr('opacity', 0)
+        })
+      
+      this.main.append('text')
+        .attr('class', 'reset')
+        .attr('transform', 'translate(' + width + ',30)')
+        .text('Reset')
+        .attr('visibility', 'hidden')
+        .on('click' , d=> this.resetting())
+
+
       this.xScale = d3.scaleLinear()
-        .range([ 0, width ])
+        .range([ 20, width ])
         .domain(d3.extent(this.data.map(d=>+d['track_pop'])))
     
-      this.main.append("g").attr("transform", "translate(0," + height + ")").call(d3.axisBottom(this.xScale))
+      this.main.append("g").attr("transform", "translate(0,370)").call(d3.axisBottom(this.xScale))
     
       this.yScale = d3.scaleLinear()
-          .range([ height, 0 ])
+          .range([ height -20, 30 ])
      
-      this.drawTable('bpm')
+    this.drawTable('bpm')
 
     }
+
+
     drawTable(yVar){
-      let brush = d3.brush().extent([[0,0], [800,400]]).on('start brush', this.brushed)
-        .on('end', function(d){
-          globalApplicationState.camelot.updateTable()
-        })
-        this.main.call(brush)
-      this.yScale.domain(d3.extent(this.data.map(d=>+d[yVar])))
-      this.main.append("g").attr('class', 'yAxis').call(d3.axisLeft(this.yScale))
+      if(yVar == 'bpm'){
+        this.yScale.domain([0,d3.max(this.data.map(d=>+d[yVar]))])
+      }else{
+        this.yScale.domain(d3.extent(this.data.map(d=>+d[yVar])))
+      }
+  
+      this.main.append('text')
+        .attr('class', 'ylabel')
+        .attr('transform', 'rotate(-90)')
+        .attr('y', -30)
+        .attr('x', -200)
+        .attr('dy', '1em')
+        .attr('text-anchor', 'middle')
+        .text(yVar)
+    
+      this.main.append("g").attr('class', 'yAxis').attr("transform", "translate(20,0)").call(d3.axisLeft(this.yScale))
 
       let Tooltip = d3.select('#one')
-      .append('div')
-      .attr('class', 'tooltip')
-      .style('background-color', 'lightgrey')
-      .style('position', 'absolute')
-      .style('visibility', 'hidden')
+        .append('div')
+        .attr('class', 'tooltip')
+        .style('background-color', 'lightgrey')
+        .style('position', 'absolute')
+        .style('visibility', 'hidden')
+      let brush = d3.brush().extent([[20,30], [750,375]]).on('start brush', this.brushed)
+        .on('end', function(d){
+          globalApplicationState.camelot.updateTable()
+        })  
+      const brushsvg = this.main.append('g').call(brush)
 
       let dots = this.main.append('g')
       dots.selectAll('circle')
@@ -50,7 +157,8 @@ class MainGraph {
         .attr("cx", d=>this.xScale(+d['track_pop']))
         .attr("cy", d=> this.yScale(+d[yVar]) )
         .attr("r", 4)
-        .attr("fill", d=> d['app'] == 'tiktok' ? "#69b3a2" : '#ac87ff')
+        .attr('fill', d=>this.colorScale(d))
+       // .attr("fill", d=> d['app'] == 'tiktok' ? "#69b3a2" : '#ac87ff')
         .attr('opacity', '.6')
         .on('mouseover', function(d,i){
 
@@ -79,7 +187,11 @@ class MainGraph {
                 && y0 <=d3.select(this).attr('cy')
                 && d3.select(this).attr('cy') < y1
       }).attr('opacity', '1').attr('class', 'brushed').data()
-   //   console.log(globalApplicationState.brushedData)
+    }
+    resetting(){
+      d3.selectAll('.cselected').classed('cselected', false).transition().attr('stroke', 'none')
+      d3.selectAll('circle').transition().attr('opacity', .6).attr('fill', d=>this.colorScale(d)).attr('stroke','none')
+      d3.select('.reset').attr('visibility', 'hidden')
     }
     highlighting(selected, i){
 

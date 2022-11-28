@@ -6,30 +6,31 @@ class CamelotWheel {
       const data = Array.from(d1)
 
       const colordata = [
-        {key:"0A", color:'#b3ffed', sort:"a"},
-        {key:"1A", color:'#bfffca', sort:"b"},
-        {key:"2A", color:'#ccfcac', sort:"c"},
-        {key:"3A", color:'#deeaa7', sort:"d"},
-        {key:"4A", color:'#f0cda7', sort:"e"},
-        {key:"5A", color:'#feb3b3', sort:"f"},
-        {key:"6A", color:'#fbaec5', sort:"g"},
-        {key:"7A", color:'#e9aee1', sort:"h"},
-        {key:"8A", color:'#d5aef9', sort:"i"},
-        {key:"9A", color:'#c6bcff', sort:"j"},
-        {key:"10A", color:'#b9ddff', sort:"k"},
-        {key:"11A", color:'#b0f8fd', sort:"l"},
-        {key:"0B", color:'#86ffe5', sort:"m"},
-        {key:"1B", color:'#99ffad', sort:"n"},
-        {key:"2B", color:'#b0fa7c', sort:"o"},
-        {key:"3B", color:'#c7e173', sort:"p"},
-        {key:"4B", color:'#e5b573', sort:"q"},
-        {key:"5B",color:'#fc7e99', sort:"r"},
-        {key:"6B", color:'#e57ec2', sort:"s"},
-        {key:"7B", color:'#c47eed', sort:"t"},
-        {key:"8B",color:'#ac87ff', sort:"u"},
-        {key:"9B", color:'#97b5ff', sort:"v"},
-        {key:"10B", color:'#85ebfd', sort:"w"},
-        {key:"11B", color:'#82fff0', sort:"x"}
+        {key:"0A", color:'#b3ffed', sort:"a", l:'B', text:'A-Flat Minor'},
+        {key:"1A", color:'#bfffca', sort:"b", l:'B', text:'E-Flat Minor'},
+        {key:"2A", color:'#ccfcac', sort:"c", l:'B', text:'B-Flat Minor'},
+        {key:"3A", color:'#deeaa7', sort:"d", l:'Fm', text:'F Minor'},
+        {key:"4A", color:'#f0cda7', sort:"e", l:'Cm', text:'C Minor'},
+        {key:"5A", color:'#feb3b3', sort:"f", l:'Gm', text:'G Minor'},
+        {key:"6A", color:'#fbaec5', sort:"g", l:'Dm', text:'D Minor'},
+        {key:"7A", color:'#e9aee1', sort:"h", l:'Am', text:'A Minor'},
+        {key:"8A", color:'#d5aef9', sort:"i", l:'Em', text:'E Minor'},
+        {key:"9A", color:'#c6bcff', sort:"j", l:'Bm', text:'B Minor'},
+        {key:"10A", color:'#b9ddff', sort:"k", l:'B', text:'F-Sharp Minor'},
+        {key:"11A", color:'#b0f8fd', sort:"l", l:'B', text:'D-Flat Minor'},
+
+        {key:"0B", color:'#86ffe5', sort:"m", l:'B', text:'F-Sharp Major'},
+        {key:"1B", color:'#99ffad', sort:"n", l:'F#', text:'F-Sharp Major'},
+        {key:"2B", color:'#b0fa7c', sort:"o", l:'C#', text:'D-Flat Major'},
+        {key:"3B", color:'#c7e173', sort:"p", l:'G#', text:'A-Flat Major'},
+        {key:"4B", color:'#e5b573', sort:"q", l:'D#', text:'E-Flat Major'},
+        {key:"5B",color:'#fc7e99', sort:"r", l:'A#', text:'B-Flat Major'},
+        {key:"6B", color:'#e57ec2', sort:"s", l:'F', text:'F Major'},
+        {key:"7B", color:'#c47eed', sort:"t", l:'C', text:'C Major'},
+        {key:"8B",color:'#ac87ff', sort:"u", l:'G', text:'G Major'},
+        {key:"9B", color:'#97b5ff', sort:"v", l:'A', text:'D Major'},
+        {key:"10B", color:'#85ebfd', sort:"w", l:'D', text:'A Major'},
+        {key:"11B", color:'#82fff0', sort:"x", l:'E', text:'E Major'}
         ];
         this.dataResult = [];
         colordata.forEach((v)=>{
@@ -108,17 +109,17 @@ class CamelotWheel {
         .attr('d', d3.arc()
           .innerRadius(0)
           .outerRadius(  byScale(0))
-          .startAngle(d=> d.key.match('A') ? axScale(d.key) : bxScale(d.key))
-          .endAngle(d=> d.key.match('A') ? axScale(d.key) + axScale.bandwidth() : bxScale(d.key) + bxScale.bandwidth())
+          .startAngle(d=> d.key.match('B') ? bxScale(d.key) : axScale(d.key))
+          .endAngle(d=> d.key.match('B') ? bxScale(d.key) + bxScale.bandwidth() : axScale(d.key) + axScale.bandwidth())
           .padAngle(.01)
           .padRadius(80)
         )
         .attr('class', 'dual')
       this.camelot.selectAll('path').transition().duration(500).attr('d', d3.arc()
-        .innerRadius( d=> d.key.match('A') ? 115: byScale(0))
-        .outerRadius( d=> d.key.match('A') ? ayScale(d['1']) : byScale(d['1']))
-        .startAngle(d=> d.key.match('A') ? axScale(d.key) : bxScale(d.key))
-        .endAngle(d=> d.key.match('A') ? axScale(d.key) + axScale.bandwidth() : bxScale(d.key) + bxScale.bandwidth())
+        .innerRadius( d=> d.key.match('B') ? 115: ayScale(0))
+        .outerRadius( d=> d.key.match('B') ? byScale(d['1']) : ayScale(d['1']))
+        .startAngle(d=> d.key.match('B') ? bxScale(d.key) : axScale(d.key))
+        .endAngle(d=> d.key.match('B') ? bxScale(d.key) + bxScale.bandwidth() : axScale(d.key) + axScale.bandwidth())
         .padAngle(.01)
         .padRadius(80)
       )
@@ -129,11 +130,11 @@ class CamelotWheel {
         .data(data)
         .enter()
         .append('g')
-          .attr('text-anchor', d=> d.key.match('A') ? (axScale(d.key) + axScale.bandwidth() /2 + Math.PI) % (2* Math.PI) < Math.PI ? 'end': 'start' :(bxScale(d.key) + bxScale.bandwidth() /2 + Math.PI) % (2* Math.PI) < Math.PI ? 'end': 'start')  
-          .attr('transform', d=> d.key.match('A') ? "rotate(" + ((axScale(d.key) + axScale.bandwidth()/2) * 180 / Math.PI - 90) + ")" + "translate(" + (120) + ",0)" : "rotate(" + ((bxScale(d.key) + bxScale.bandwidth()/2) * 180 / Math.PI - 90) + ")" + "translate(" + (90) + ",0)" )
+          .attr('text-anchor', d=> d.key.match('B') ? (bxScale(d.key) + bxScale.bandwidth() /2 + Math.PI) % (2* Math.PI) < Math.PI ? 'end': 'start' :(axScale(d.key) + axScale.bandwidth() /2 + Math.PI) % (2* Math.PI) < Math.PI ? 'end': 'start')  
+          .attr('transform', d=> d.key.match('B') ? "rotate(" + ((bxScale(d.key) + bxScale.bandwidth()/2) * 180 / Math.PI - 90) + ")" + "translate(" + (120) + ",0)" : "rotate(" + ((axScale(d.key) + axScale.bandwidth()/2) * 180 / Math.PI - 90) + ")" + "translate(" + (90) + ",0)" )
         .append('text')
-          .text(d=> d.key)
-          .attr('transform', d=>d.key.match('A') ? (axScale(d.key) + axScale.bandwidth() /2 + Math.PI) %(2*Math.PI) < Math.PI  ? "rotate(180)" : "rotate(0)" :(bxScale(d.key) + bxScale.bandwidth() /2 + Math.PI) %(2*Math.PI) < Math.PI  ? "rotate(180)" : "rotate(0)" )
+          .text(d=> d.l)
+          .attr('transform', d=>d.key.match('B') ? (bxScale(d.key) + bxScale.bandwidth() /2 + Math.PI) %(2*Math.PI) < Math.PI  ? "rotate(180)" : "rotate(0)" :(axScale(d.key) + axScale.bandwidth() /2 + Math.PI) %(2*Math.PI) < Math.PI  ? "rotate(180)" : "rotate(0)" )
           .attr('alignment-baseline', 'middle').attr('class', 'dlabel')
      
         }
@@ -192,7 +193,7 @@ class CamelotWheel {
      
     let path =   this.camelot.selectAll('path')   .on('mouseover', function(d,i){
           Tooltip.style('visibility', 'visible')
-          .html(i.key + '</br>' + i['1'])
+          .html(i.text + '</br>' + i['1'])
           .style('text-transform', 'capitalize')
       })
       .on('mousemove', function(d){
@@ -203,7 +204,9 @@ class CamelotWheel {
         Tooltip
         .style("visibility", 'hidden') 
       }).on('click', function(d,i){
+        d3.select('.reset').attr('visibility', 'visible')
         if(d3.select(this).classed('cselected')){
+
           d3.select(this).attr('stroke', 'none').classed('cselected', false)
           globalApplicationState.main.highlighting(false,i)
         }
