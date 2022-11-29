@@ -49,7 +49,6 @@ loadData().then((loadedData)=>{
     }else{
       chart.updateTable(globalApplicationState.data ,updated)
     }
-    
   })
 
   d3.select('#toggle').on('click', (d)=>{
