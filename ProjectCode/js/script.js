@@ -43,12 +43,14 @@ loadData().then((loadedData)=>{
     main.updateTable(updated)
     d3.selectAll('.brush').call(d3.brush().clear)
 
+    //MOVED to main.js 157
+/*
     //need boolean for if brushed or not?
     if(globalApplicationState.main.brushedData){
       chart.updateTable(globalApplicationState.main.brushedData ,updated)
     }else{
-      chart.updateTable(globalApplicationState.data ,updated)
-    }
+       chart.updateTable(globalApplicationState.data ,yVar)
+    }*/
   })
 
   d3.select('#toggle').on('click', (d)=>{

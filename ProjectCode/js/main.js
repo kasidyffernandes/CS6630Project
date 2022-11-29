@@ -4,7 +4,7 @@ class MainGraph {
     this.globalApplicationState = globalApplicationState;
     this.data = globalApplicationState.data;
     this.chart = globalApplicationState.chart;
-
+    this.yV = d3.select(this).property('value');
     let margin = {top: 30, right: 30, bottom: 30, left: 30},
       width = 800 - margin.left - margin.right,
       height = 450 - margin.top - margin.bottom;
@@ -54,6 +54,7 @@ class MainGraph {
       .text('Spotify')
       .on('mouseover', function(d){
         d3.selectAll('circle').filter(d=>d['app'] == 'spotify').transition().attr('opacity', 1)
+       
       })
       .on('mouseout', function(d){
         d3.selectAll('circle').filter(d=>d['app'] == 'spotify').transition().attr('opacity', .6)
@@ -65,6 +66,8 @@ class MainGraph {
           d3.select('.reset').attr('visibility', 'visible')
           d3.selectAll('circle').filter(d=>d['app'] != 'spotify').transition().attr('opacity', 0)
           d3.selectAll('circle').filter(d=>d['app'] == 'spotify').transition().attr('opacity', .6).attr('fill', '#ac87ff')
+          globalApplicationState.chart.updateTable(d3.selectAll('circle').filter(d=> d['app'] == 'spotify').data(), this.yV)
+          d3.selectAll('.brush').call(d3.brush().clear)
         }
       })
 
@@ -85,6 +88,8 @@ class MainGraph {
           d3.select('.reset').attr('visibility', 'visible')
           d3.selectAll('circle').filter(d=>d['app'] != 'tiktok').transition().attr('opacity', 0)
           d3.selectAll('circle').filter(d=>d['app'] == 'tiktok').transition().attr('opacity', .6).attr('fill',  "#69b3a2")
+          globalApplicationState.chart.updateTable(d3.selectAll('circle').filter(d=> d['app'] == 'tiktok').data(), this.yV)
+          d3.selectAll('.brush').call(d3.brush().clear)
         }
       })
 
@@ -104,6 +109,7 @@ class MainGraph {
         d3.selectAll('#tiktok').transition().attr('opacity', 0)
         d3.selectAll('#spotify').transition().attr('opacity', 0)
         d3.selectAll('#both').transition().attr('opacity', .6).attr('fill', 'black')
+        d3.selectAll('.brush').call(d3.brush().clear)
        // d3.selectAll("circle:not([fill='black'])").transition().attr('opacity', 0)
       })
     
@@ -154,6 +160,7 @@ class MainGraph {
     let brush = d3.brush().extent([[20,30], [750,375]]).on('start brush', this.brushed)
       .on('end', function(d){
         if(globalApplicationState.brushedData.length == 0){
+          globalApplicationState.chart.updateTable(globalApplicationState.data ,yVar)
           clearBrush()
         }else{
           //still need to revert to rull data when not selected...
