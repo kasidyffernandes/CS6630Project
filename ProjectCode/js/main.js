@@ -2,7 +2,8 @@ class MainGraph {
 
     constructor(globalApplicationState) {
       this.globalApplicationState = globalApplicationState;
-      this.data = globalApplicationState.data
+      this.data = globalApplicationState.data;
+      this.chart = globalApplicationState.chart;
 
       let margin = {top: 30, right: 30, bottom: 30, left: 30},
         width = 800 - margin.left - margin.right,
@@ -147,6 +148,8 @@ class MainGraph {
       let brush = d3.brush().extent([[20,30], [750,375]]).on('start brush', this.brushed)
         .on('end', function(d){
           globalApplicationState.camelot.updateTable()
+          //still need to revert to rull data when not selected...
+          globalApplicationState.chart.updateTable(globalApplicationState.brushedData)
         })  
       const brushsvg = this.main.append('g').call(brush)
 

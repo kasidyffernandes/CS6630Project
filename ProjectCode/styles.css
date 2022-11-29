@@ -50,3 +50,15 @@ tr:nth-of-type(2n){
       fill: red;
       font-weight: bold;
 }
+.header {
+      fill: aliceblue;
+      stroke: #fff;
+      stroke-width: 2px;
+      cursor: pointer;
+    }
+    
+    .header-text {
+      font-size: 11px;
+      text-anchor: middle;
+      font-weight: 700;
+    }
