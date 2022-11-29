@@ -40,9 +40,9 @@ loadData().then((loadedData)=>{
 
   d3.select('#yAxis').on('change', function(){
     var updated = d3.select(this).property('value')
-    d3.selectAll('circle').remove()
-    d3.selectAll('.yAxis').remove()
-    main.drawTable(updated)
+    main.updateTable(updated)
+    d3.selectAll('.brush').call(d3.brush().clear)
+
     //need boolean for if brushed or not?
     if(globalApplicationState.main.brushedData){
       chart.updateTable(globalApplicationState.main.brushedData ,updated)

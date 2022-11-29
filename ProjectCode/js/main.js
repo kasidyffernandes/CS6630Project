@@ -93,10 +93,18 @@ class MainGraph {
         .attr('transform', 'translate(' + width + ',15)')
         .attr('fill', "black" )
         .text('Both')
+        .on('mouseover', function(d){
+          d3.selectAll('#both').transition().attr('opacity', 1)
+        })
+        .on('mouseout', function(d){
+          d3.selectAll('#both').transition().attr('opacity', .6)
+        }) 
         .on('click', function(d){
           d3.select('.reset').attr('visibility', 'visible')
-          d3.selectAll("circle[fill='black']").transition().attr('opacity', .6)
-          d3.selectAll("circle:not([fill='black'])").transition().attr('opacity', 0)
+          d3.selectAll('#tiktok').transition().attr('opacity', 0)
+          d3.selectAll('#spotify').transition().attr('opacity', 0)
+          d3.selectAll('#both').transition().attr('opacity', .6)
+         // d3.selectAll("circle:not([fill='black'])").transition().attr('opacity', 0)
         })
       
       this.main.append('text')
@@ -124,8 +132,6 @@ class MainGraph {
     drawTable(yVar){
       if(yVar == 'bpm'){
         this.yScale.domain([0,d3.max(this.data.map(d=>+d[yVar]))])
-      }else{
-        this.yScale.domain(d3.extent(this.data.map(d=>+d[yVar])))
       }
   
       this.main.append('text')
@@ -147,11 +153,18 @@ class MainGraph {
         .style('visibility', 'hidden')
       let brush = d3.brush().extent([[20,30], [750,375]]).on('start brush', this.brushed)
         .on('end', function(d){
-          globalApplicationState.camelot.updateTable()
-          //still need to revert to rull data when not selected...
-          globalApplicationState.chart.updateTable(globalApplicationState.brushedData, yVar)
+          if(globalApplicationState.brushedData.length == 0){
+            clearBrush()
+          }else{
+            //still need to revert to rull data when not selected...
+            globalApplicationState.chart.updateTable(globalApplicationState.brushedData, yVar)
+          }
         })  
-      const brushsvg = this.main.append('g').call(brush)
+      const brushsvg = this.main.append('g').attr('class', 'brush').call(brush)
+      function clearBrush(){
+        d3.selectAll('circle').attr('opacity', .6).transition()
+        brushsvg.call(d3.brush().clear)
+      }
 
       let dots = this.main.append('g')
       dots.selectAll('circle')
@@ -161,6 +174,7 @@ class MainGraph {
         .attr("cy", d=> this.yScale(+d[yVar]) )
         .attr("r", 4)
         .attr('fill', d=>this.colorScale(d))
+        .attr('id', d=> this.colorScale(d) == 'black' ? 'both' : d['app'])
        // .attr("fill", d=> d['app'] == 'tiktok' ? "#69b3a2" : '#ac87ff')
         .attr('opacity', '.6')
         .on('mouseover', function(d,i){
@@ -176,8 +190,23 @@ class MainGraph {
         .on('mouseout', function(d){
           Tooltip
           .style("visibility", 'hidden') 
-        })
-      
+        }) 
+    }
+    updateTable(yVar){
+      console.log('updating')
+      let svg = this.main.transition()
+      if(yVar == 'bpm'){
+        this.yScale.domain([0,d3.max(this.data.map(d=>+d[yVar]))])
+      }else{
+        this.yScale.domain(d3.extent(this.data.map(d=>+d[yVar])))
+      }
+      svg.select('.yAxis').duration(700).attr("transformation", "translate(20,0)").call(d3.axisLeft(this.yScale))
+      svg.select('.ylabel').duration(700).text(yVar)
+      svg.selectAll('circle').duration(700)
+        .attr("cx", d=>this.xScale(+d['track_pop']))
+        .attr("cy", d=> this.yScale(+d[yVar]) )
+  
+
     }
     brushed({selection}){
       let dots = d3.select('#one').selectAll('circle')
@@ -209,12 +238,6 @@ class MainGraph {
         d3.selectAll('circle').filter(d=> d['camelot'] == i.key)
           .attr('stroke', 'none').attr('fill',  d=> d['app'] == 'tiktok' ? "#69b3a2" : '#ac87ff').attr('opacity', '.6')
       }
-      //let i = d3.selectAll('.cselected').property('cselected', true)
-
-     // d3.selectAll('circle').data(highlightdata).attr('stroke', 'red').raise()
-     
-   //  d3.selectAll('circle')
-     // console.log(key)
     }
 
 }
