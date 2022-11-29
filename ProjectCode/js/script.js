@@ -31,7 +31,7 @@ loadData().then((loadedData)=>{
   const camelot= new CamelotWheel(globalApplicationState);
   const heatmap = new HeatMap(globalApplicationState);
   const main = new MainGraph(globalApplicationState);
-  const chart = new ListChart(globalApplicationState);
+  const chart = new ListChart(globalApplicationState, 'bpm'); //default value is bpm...
   
   globalApplicationState.heatmap = heatmap;
   globalApplicationState.camelot = camelot;
@@ -43,6 +43,13 @@ loadData().then((loadedData)=>{
     d3.selectAll('circle').remove()
     d3.selectAll('.yAxis').remove()
     main.drawTable(updated)
+    //need boolean for if brushed or not?
+    if(globalApplicationState.main.brushedData){
+      chart.updateTable(globalApplicationState.main.brushedData ,updated)
+    }else{
+      chart.updateTable(globalApplicationState.data ,updated)
+    }
+    
   })
 
   d3.select('#toggle').on('click', (d)=>{

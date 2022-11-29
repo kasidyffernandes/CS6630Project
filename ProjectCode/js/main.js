@@ -149,7 +149,7 @@ class MainGraph {
         .on('end', function(d){
           globalApplicationState.camelot.updateTable()
           //still need to revert to rull data when not selected...
-          globalApplicationState.chart.updateTable(globalApplicationState.brushedData)
+          globalApplicationState.chart.updateTable(globalApplicationState.brushedData, yVar)
         })  
       const brushsvg = this.main.append('g').call(brush)
 
