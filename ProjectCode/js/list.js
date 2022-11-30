@@ -13,15 +13,16 @@ class ListChart {
     constructor(globalApplicationState, yVar) {
       this.globalApplicationState = globalApplicationState;
       this.data = globalApplicationState.data;
-      this.selectedAttribute = yVar;
+      this.yV = d3.select("#yAxis").property('value');
 
+      
       this.header = [
         { name: "Popularity", key: "pop" },
         { name: "Track", key: "track" },
         { name: "Artist", key: "artist" },
-        { name: yVar, key: "attribute" },
+        { name: this.yV, key: "attribute" },
       ];
-    
+
       this.table = d3.select('#table');
       this.tableBody = d3.select('#tbody');
 
@@ -36,7 +37,7 @@ class ListChart {
       console.log(top)
 
       this.makeHeader();
-      this.updateTable(this.data, yVar);
+      this.updateTable(this.data);
     }
 
      makeHeader() {
@@ -77,10 +78,10 @@ class ListChart {
       })
     }
 
-    updateTable(data, yVar){
+    updateTable(data){
       this.data = data;
-      this.selectedAttribute = yVar;
-      this.updateHeader(this.selectedAttribute);
+      let yVal = d3.select("#yAxis").property('value');
+      this.updateHeader(this.yV);
 
       //format data for table using filters...
       const formattedData = this.data.map((d) => {
@@ -88,7 +89,7 @@ class ListChart {
            pop: d.track_pop,
            track: d.name,
            artist: d.artist,
-           attribute: d[yVar],  //value changes with toggle...
+           attribute: d[this.yV],  //value changes with toggle...
         }
       })
 
@@ -121,19 +122,21 @@ class ListChart {
           case 'artist':
             return this.sortAscend ? a.artist.localeCompare(b.artist) : b.artist.localeCompare(a.artist);
           case 'attribute':
-            let key = this.selectedAttribute;
+            let key = this.yV;
             return this.sortAscend ? d3.descending(+a[key], +b[key]) : d3.descending(+b[key], +a[key]);
         }
       } )
       //update with the sorted data:
-      this.updateTable(sortedData, this.selectedAttribute);
+      this.updateTable(sortedData);
     }
-    updateHeader(yVar){
+    updateHeader(){
+      this.yV = d3.select("#yAxis").property('value');
+
       this.header = [//can you not change the other ones?
         { name: "Popularity", key: "pop" },
         { name: "Track", key: "track" },
         { name: "Artist", key: "artist" },
-        { name: yVar, key: "attribute" },
+        { name: this.yV, key: "attribute" },
       ];
 
       d3.select("#theader")

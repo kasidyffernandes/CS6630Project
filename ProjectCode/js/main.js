@@ -66,7 +66,7 @@ class MainGraph {
           d3.select('.reset').attr('visibility', 'visible')
           d3.selectAll('circle').filter(d=>d['app'] != 'spotify').transition().attr('opacity', 0)
           d3.selectAll('circle').filter(d=>d['app'] == 'spotify').transition().attr('opacity', .6).attr('fill', '#ac87ff')
-          globalApplicationState.chart.updateTable(d3.selectAll('circle').filter(d=> d['app'] == 'spotify').data(), this.yV)
+          globalApplicationState.chart.updateTable(d3.selectAll('circle').filter(d=> d['app'] == 'spotify').data())
           d3.selectAll('.brush').call(d3.brush().clear)
         }
       })
@@ -88,7 +88,7 @@ class MainGraph {
           d3.select('.reset').attr('visibility', 'visible')
           d3.selectAll('circle').filter(d=>d['app'] != 'tiktok').transition().attr('opacity', 0)
           d3.selectAll('circle').filter(d=>d['app'] == 'tiktok').transition().attr('opacity', .6).attr('fill',  "#69b3a2")
-          globalApplicationState.chart.updateTable(d3.selectAll('circle').filter(d=> d['app'] == 'tiktok').data(), this.yV)
+          globalApplicationState.chart.updateTable(d3.selectAll('circle').filter(d=> d['app'] == 'tiktok').data())
           d3.selectAll('.brush').call(d3.brush().clear)
         }
       })
@@ -160,11 +160,11 @@ class MainGraph {
     let brush = d3.brush().extent([[20,30], [750,375]]).on('start brush', this.brushed)
       .on('end', function(d){
         if(globalApplicationState.brushedData.length == 0){
-          globalApplicationState.chart.updateTable(globalApplicationState.data ,yVar)
+          globalApplicationState.chart.updateTable(globalApplicationState.data)
           clearBrush()
         }else{
           //still need to revert to rull data when not selected...
-          globalApplicationState.chart.updateTable(globalApplicationState.brushedData, yVar)
+          globalApplicationState.chart.updateTable(globalApplicationState.brushedData)
         }
       })  
     const brushsvg = this.main.append('g').attr('class', 'brush').call(brush)
