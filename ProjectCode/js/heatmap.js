@@ -171,8 +171,9 @@ class HeatMap {
       selection.map((d) => parseInt(d["duration_ms"]))
     );
     let [instMIN, instMAX] = d3.extent(
-      selection.map((d) => parseInt(d["instrumentalness"]))
+      selection.map((d) => parseFloat(d["instrumentalness"]))
     );
+    console.log("Inst. Min: " + instMIN + " Inst. Max: " + instMAX);
 
     //attribute scales
     let attrColor = d3.scaleLinear().range(colorRange).domain([0, 1]);
