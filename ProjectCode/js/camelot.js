@@ -60,7 +60,7 @@ class CamelotWheel {
           .attr('class', 'infotip')
           .style('background-color', 'lightgrey')
           .style('position', 'fixed')
-          .style('visibility', 'visible')
+          .style('visibility', 'hidden')
           let img = 'data/CamelotWheel.jpg'
 
          this.camelot.append('text')
@@ -70,6 +70,11 @@ class CamelotWheel {
         .text('Camelot Key Wheel')
 
         this.drawTable()
+        this.camelot.append('text')
+        .attr('class', 'title')
+        .attr('transform', "translate(0,-200)")
+        .attr('text-anchor', 'top')
+        .text('Camelot Key Wheel')
         this.camelot.append('text')
         .attr('text-anchor', 'top')
         .attr('transform', 'translate(200,-200)')

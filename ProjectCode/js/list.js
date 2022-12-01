@@ -88,6 +88,7 @@ class ListChart {
     this.formattedData = this.data.map((d) => {
       return {
         pop: d.track_pop,
+        art: {img: d.image, song:d.songplay}, 
         track: d.name,
         artist: d.artist,
         attribute: d[this.yV], //value changes with toggle...
@@ -115,7 +116,24 @@ class ListChart {
       .selectAll("td")
       .data((d) => d3Entries(d))
       .join("td")
-      .text((d) => d.value);
+      .text((d) => d.key !== 'art' ? d.value : null);
+    
+    allRows.filter(d=>d.key === 'art')
+      .selectAll('svg')
+      .data(d=>[d])
+      .join('svg')
+      .style('vertical-align', 'middle')
+      .attr('width', d=> SIZE_DICT[d.key])
+      .attr('height', CELL_HEIGHT)
+    
+      const imgCell = allRows.filter(d=>d.key==='art')
+
+      imgCell.selectAll('img')
+        .data(d=>[d.value])
+        .enter()
+        .append('img')
+        .attr('src', d=>d.img).attr('width',100).attr('height', 100)
+  
   }
 
   sorter(keyword) {
