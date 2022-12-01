@@ -88,8 +88,8 @@ class ListChart {
     this.formattedData = this.data.map((d) => {
       return {
         pop: d.track_pop,
-        art: {img: d.image, song:d.songplay}, 
-        track: d.name,
+        art: {img: d.image, song:d.songplay, t: d.name}, 
+       
         artist: d.artist,
         attribute: d[this.yV], //value changes with toggle...
         // danceability: d.danceability,
@@ -117,14 +117,7 @@ class ListChart {
       .data((d) => d3Entries(d))
       .join("td")
       .text((d) => d.key !== 'art' ? d.value : null);
-    
-    allRows.filter(d=>d.key === 'art')
-      .selectAll('svg')
-      .data(d=>[d])
-      .join('svg')
-      .style('vertical-align', 'middle')
-      .attr('width', d=> SIZE_DICT[d.key])
-      .attr('height', CELL_HEIGHT)
+
     
       const imgCell = allRows.filter(d=>d.key==='art')
 
@@ -133,11 +126,16 @@ class ListChart {
         .enter()
         .append('img')
         .attr('src', d=>d.img).attr('width',100).attr('height', 100)
+      imgCell.selectAll('text')
+      .data(d=>[d.value])
+      .enter()
+      .append('text')
+      .text(d=>d.t)
   
   }
 
   sorter(keyword) {
-    //clicking the same header, so reverse order
+    //clickinpy the same header, so reverse order
     if (this.sortKeyword && this.sortKeyword.includes(keyword)) {
       this.sortAscend = !this.sortAscend;
     }
