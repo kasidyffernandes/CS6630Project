@@ -45,34 +45,75 @@ class CamelotWheel {
         this.height = 460 - this.margin.top - this.margin.bottom
     
    
-       this.camelot = d3.select('#two')
+      /* d3.select('#two').append('input').attr('type', 'checkbox')
+            .attr("checked", true)
+        .attr("type", "checkbox")*/
+        this.camelot = d3.select('#two')
         .append("svg")
           .attr("width", this.width + this.margin.left + this.margin.right)
           .attr("height", this.height + this.margin.top + this.margin.bottom)
         .append("g")
           .attr("transform", "translate(" + this.width / 2 + "," + ( this.height/2 )+ ")"); 
     
+        let infotip = d3.select('#two')
+          .append('div')
+          .attr('class', 'infotip')
+          .style('background-color', 'lightgrey')
+          .style('position', 'fixed')
+          .style('visibility', 'visible')
+          let img = 'data/CamelotWheel.jpg'
+
+         this.camelot.append('text')
+        .attr('class', 'title')
+        .attr('transform', "translate(0,-200)")
+        .attr('text-anchor', 'top')
+        .text('Camelot Key Wheel')
+
         this.drawTable()
-
-     //  let data = d.sort(function(a,b){return d3.ascending(a.key, b.key)})
-
-     
-
-    
+        this.camelot.append('text')
+        .attr('text-anchor', 'top')
+        .attr('transform', 'translate(200,-200)')
+        .text('?')
+        .attr('font-weight', 'bold')
+        .attr('fill', 'blue')
+        .attr('font-size', '20px')
+        .on('mouseover', function(d){
+          infotip.transition().duration(200).style('visibility', 'visible')
+         let  string = "<h1>The Camelot wheel</h1> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque et ligula at enim tincidunt suscipit.  \n  <img src= data/CamelotWheel.jpg width='300' height=300 />";
+         infotip.html(string)
+         .style('top', d.pageY -10 + 'px')
+          .style('left', d.pageX - 400 + 'px')
+          .style('text-transform', 'capitalize')
+    })
+    .on('mouseout', function(d){
+   
+      infotip
+      .style("visibility", 'hidden') 
+    })
     }
     drawTable(){
       let ischecked = d3.select('#toggle').property('checked')
       let data = this.dataResult
       data = data.sort(function(a,b){return d3.ascending(a.sort, b.sort)})
+      this.camelot.append('rect')
+      .attr('class', 'ctooltip')
+      .attr("x", -100)
+      .attr("y", -100)
 
-      let Tooltip = d3.select('#two')
-      .append('div')
-      .attr('class', 'tooltip')
-      .style('background-color', 'lightgrey')
-      .style('position', 'absolute')
-      .style('visibility', 'hidden')
+      let Tooltip = this.camelot
+      .append('text')
+      .attr('class', 'ctooltip')
+      .attr('id', 'tooltiptext')
+      .attr('transform', "translate(0,0)")
 
-    
+      let Tooltip2 = this.camelot
+      .append('text')
+      .attr('class', 'ctooltip')
+      .attr('id', 'tooltiptext')
+      .attr('transform', "translate(0,15)")
+
+  
+           //.  attr('transform', "translate(0,0)")
     
      // Add 100 on Y translation, cause upper bars are longer
    
@@ -82,25 +123,95 @@ class CamelotWheel {
        let bdata = data.filter(function(d){return d.key.match('B')})
       // console.log(adata,bdata)
 
-
-       let axScale = d3.scaleBand()
+      let innerRadius = 70
+       let bxScale = d3.scaleBand()
        .range([0,2*Math.PI])
        .align(0)
-       .domain(adata.map(d=>d.key))
+       .domain(bdata.map(d=>d.key))
 
-     let ayScale = d3.scaleRadial()
+     let byScale = d3.scaleRadial()
        .range([110, Math.min(this.width, this.height)/2])
        .domain([0,d3.max(data.map(d=>d['1']))])
 
-      let bxScale = d3.scaleBand()
+      let axScale = d3.scaleBand()
         .range([0,2*Math.PI])
         .align(0)
-        .domain(bdata.map(d=>d.key))
+        .domain(adata.map(d=>d.key))
 
-      let byScale = d3.scaleRadial()
-        .range([110, 1])
+      let ayScale = d3.scaleRadial()
+        .range([innerRadius, 0])
         .domain([0,d3.max(data.map(d=>d['1']))])
+        console.log(ayScale(0), byScale(0))
 
+        this.camelot.append('g')
+        .selectAll('path')
+        .data(data)
+        .enter()
+        .append('path')
+        .attr('fill', d=>d.color)
+        .attr('d', d3.arc()
+          .innerRadius(0)
+          .outerRadius(  byScale(0))
+          .startAngle(d=> d.key.match('A') ? axScale(d.key) : bxScale(d.key))
+          .endAngle(d=> d.key.match('A') ? axScale(d.key) + axScale.bandwidth() : bxScale(d.key) + bxScale.bandwidth())
+          .padAngle(.01)
+          .padRadius(80)
+        ).attr('class', 'dual')
+   
+        this.camelot.selectAll('path').transition().duration(500).attr('d', d3.arc()
+        .innerRadius( d=> d.key.match('A') ? 115: byScale(0))
+        .outerRadius( d=> d.key.match('A') ? ayScale(d['1']) : byScale(d['1']))
+        .startAngle(d=> d.key.match('A') ? axScale(d.key) : bxScale(d.key))
+        .endAngle(d=> d.key.match('A') ? axScale(d.key) + axScale.bandwidth() : bxScale(d.key) + bxScale.bandwidth())
+        .padAngle(.01)
+        .padRadius(80)
+      ).attr('class', 'dual')
+      this.camelot.append("g")
+      .selectAll("g")
+      .data(data)
+      .enter()
+      .append("g")
+        .attr("text-anchor",  d=> d.key.match('A') ?  (axScale(d.key) + axScale.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start" :(bxScale(d.key) + bxScale.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "end" : "start" )
+        .attr("transform",  d=> d.key.match('A') ? "rotate(" + ((axScale(d.key) + axScale.bandwidth() / 2) * 180 / Math.PI - 90) + ")"+"translate(" + (120) + ",0)" : "rotate(" + ((bxScale(d.key) + bxScale.bandwidth() / 2) * 180 / Math.PI - 90) + ")"+"translate(" + (90) + ",0)" )
+      .append("text")
+        .text(function(d){return(d.key)})
+       .attr("transform", d=> d.key.match('A') ? (axScale(d.key) + axScale.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "rotate(180)" : "rotate(0)" : (bxScale(d.key) + bxScale.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "rotate(180)" : "rotate(0)")
+        .style("font-size", "11px")
+        .attr("alignment-baseline", "middle").transition().duration(500).attr('class', 'dlabel')
+
+
+     /*
+      this.camelot.append('g')
+        .selectAll('path')
+        .data(bdata)
+        .enter()
+        .append('path')
+        .attr('fill', d=>d.color)
+        .attr('d', d3.arc()
+          .innerRadius(0)
+          .outerRadius(d=> byScale(d['1']))
+          .startAngle(d=>bxScale(d.key))
+          .endAngle(d=>bxScale(d.key) + bxScale.bandwidth())
+          .padAngle(.01)
+          .padRadius(80)
+        )
+
+        this.camelot.append('g')
+        .selectAll('path')
+        .data(adata)
+        .enter()
+        .append('path')
+        .attr('fill', d=>d.color)
+        .attr('d', d3.arc()
+          .innerRadius(innerRadius)
+          .outerRadius(d=> ayScale(d['1']))
+          .startAngle(d=>axScale(d.key))
+          .endAngle(d=>axScale(d.key) + axScale.bandwidth())
+          .padAngle(.01)
+          .padRadius(80)
+        )
+*/
+/*
         this.camelot.append('g')
         .selectAll('path')
         .data(data)
@@ -136,9 +247,9 @@ class CamelotWheel {
        .attr("transform", d=> d.key.match('A') ? (axScale(d.key) + axScale.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "rotate(180)" : "rotate(0)" : (bxScale(d.key) + bxScale.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "rotate(180)" : "rotate(0)")
         .style("font-size", "11px")
         .attr("alignment-baseline", "middle").transition().duration(500).attr('class', 'dlabel')
-        }
-
-
+       
+*/
+}
      else{
       d3.selectAll('.dual').remove()
       d3.selectAll('.dlabel').remove()
@@ -184,26 +295,24 @@ class CamelotWheel {
       .attr('text-anchor', d=> (xScale(d.key) + xScale.bandwidth() /2 + Math.PI) % (2* Math.PI) < Math.PI ? 'end': 'start')  
       .attr('transform', d=>  "rotate(" + ((xScale(d.key) + xScale.bandwidth()/2) * 180 / Math.PI - 90) + ")" + "translate(" + (yScale(d['1'])-30) + ",0)")
     .append('text')
-      .text(d=> d.l)
+      .text(d=> d.key)
       .attr('transform', d=> (xScale(d.key) + xScale.bandwidth() /2 + Math.PI) %(2*Math.PI) < Math.PI  ? "rotate(180)" : 'rotate(0)')
-      .attr('alignment-baseline', 'middle').attr('class', 'dlabel')
+      .attr('alignment-baseline', 'middle').attr('class', 'slabel')
       .style("font-size", "11px")
      
       }
-     
-    let path =   this.camelot.selectAll('path')   .on('mouseover', function(d,i){
-          Tooltip.style('visibility', 'visible')
-          .html(i.text + '</br>' + i['1'])
-          .style('text-transform', 'capitalize')
+
+    let path =   this.camelot.selectAll('path')   
+    .on('mouseover', function(d,i){
+          d3.selectAll('.ctooltip').style('visibility', 'visible')
+          Tooltip.style('visibility', 'visible').html(i['1'] + ' Songs in key'  )
+          .style('text-transform', 'capitalize').raise()
+          Tooltip2.style('visibility', 'visible').html(i['text'])
+          .style('text-transform', 'capitalize').raise()
+      }).on('mouseout', function(){
+        d3.selectAll('.ctooltip').style('visibility', 'hidden')
       })
-      .on('mousemove', function(d){
-        Tooltip.style('top', d.pageY -10 + 'px')
-        .style('left', d.pageX + 10 + 'px')
-      })
-      .on('mouseout', function(d){
-        Tooltip
-        .style("visibility", 'hidden') 
-      }).on('click', function(d,i){
+      .on('click', function(d,i){
         d3.select('.reset').attr('visibility', 'visible')
         if(d3.select(this).classed('cselected')){
 
