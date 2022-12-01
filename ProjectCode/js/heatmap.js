@@ -10,61 +10,11 @@ class HeatMap {
 
     console.log("heatamp called");
 
-    this.heatmap = d3
-      .select("#heatmap")
-      .append("svg")
-      .attr("width", width / 2 + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .attr("style", "outline: thin solid black;")
-      .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    let tracks = [
-      "T1",
-      "T2",
-      "T3",
-      "T4",
-      "T5",
-      "T6",
-      "T7",
-      "T8",
-      "T9",
-      "T10",
-      "T11",
-      "T12",
-      "T13",
-      "T14",
-      "T15",
-      "T16",
-      "T17",
-      "T18",
-      "T19",
-      "T20",
-      "T21",
-      "T22",
-      "T23",
-      "T24",
-      "T25",
-    ];
-
-    let attributes = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9"];
-
-    //Axis
-    this.x = d3
-      .scaleBand()
-      .range([0, width / 2])
-      .domain(attributes)
-      .padding(0.01);
-
-    this.y = d3.scaleBand().range([0, height]).domain(tracks).padding(0.01);
-
-    this.heatmap.append("g").call(d3.axisTop(this.x));
-    this.heatmap.append("g").call(d3.axisLeft(this.y));
+    //setup axis
+    this.setup();
 
     //update heatmap...
     this.updateTable();
-
-    
   }
 
   mapData(data) {
@@ -134,17 +84,83 @@ class HeatMap {
         track.name,
         track.artist,
       ]);
+      mapData.push([
+        `T${i + 1}`,
+        "A10",
+        parseFloat(track.acousticness),
+        track.name,
+        track.artist,
+      ]);
     }
     return mapData;
   }
-  updateTable() {
+
+  setup() {
+    this.heatmap = d3
+      .select("#heatmap")
+      .append("svg")
+      .attr("width", width / 2 + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .attr("style", "outline: thin solid black;")
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    let tracks = [
+      "T1",
+      "T2",
+      "T3",
+      "T4",
+      "T5",
+      "T6",
+      "T7",
+      "T8",
+      "T9",
+      "T10",
+      "T11",
+      "T12",
+      "T13",
+      "T14",
+      "T15",
+      "T16",
+      "T17",
+      "T18",
+      "T19",
+      "T20",
+      "T21",
+      "T22",
+      "T23",
+      "T24",
+      "T25",
+    ];
+
+    let attributes = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10"];
+
+    //Axis
+    this.x = d3
+      .scaleBand()
+      .range([0, width / 2])
+      .domain(attributes)
+      .padding(0.01);
+
+    this.y = d3.scaleBand().range([0, height]).domain(tracks).padding(0.01);
+
+    this.heatmap.append("g").call(d3.axisTop(this.x));
+    this.heatmap.append("g").call(d3.axisLeft(this.y));
+  }
+
+  updateTable(data) {
+    //update with given data?
+    if (data) {
+      this.data = data;
+    }
+
+    //selecting the top 25 from the data:
     let selection = this.data.slice(0, 25);
-    console.log(selection[0]);
 
     //Color scales
     let colorRange = ["white", "#69b3a2"];
 
-    //determine min/max for bpm, loudness and duration scales
+    //determine min/max for bpm, loudness, duration and instrumentalness scales
     let [bpmMIN, bpmMAX] = d3.extent(
       selection.map((d) => parseFloat(d["bpm"]))
     );
@@ -153,6 +169,9 @@ class HeatMap {
     );
     let [lengthMIN, lengthMAX] = d3.extent(
       selection.map((d) => parseInt(d["duration_ms"]))
+    );
+    let [instMIN, instMAX] = d3.extent(
+      selection.map((d) => parseInt(d["instrumentalness"]))
     );
 
     //attribute scales
@@ -166,6 +185,10 @@ class HeatMap {
       .scaleLinear()
       .range(colorRange)
       .domain([lengthMIN, lengthMAX]);
+    
+    let instColor = d3.scaleLinear()
+      .range(colorRange)
+      .domain([instMIN, instMAX]);
 
     let Tooltip = d3
       .select("#three")
@@ -194,6 +217,8 @@ class HeatMap {
           return loudColor(d[2]);
         } else if (d[1] === "A9") {
           return lengthColor(d[2]);
+        } else if (d[1] === "A3") {
+          return instColor(d[2]);
         } else {
           return attrColor(d[2]);
         }
@@ -221,8 +246,10 @@ class HeatMap {
               title = "Loudness";
             } else if (i[1] === "A9") {
               title = "Duration";
+            } else if(i[1] === "A10") {
+              title = "Acousticness";
             }
-            return i[3] + "</br>" + i[4] + "</br>" + title + ":" + i[2];
+            return i[3] + "</br>" + i[4] + "</br>" + title + ": " + i[2];
           })
           .style("text-transform", "capitalize");
       })
@@ -234,5 +261,6 @@ class HeatMap {
       })
       .on("mouseout", function (d) {
         Tooltip.style("visibility", "hidden");
-      });}
+      });
+  }
 }

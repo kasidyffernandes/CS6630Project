@@ -31,7 +31,7 @@ loadData().then((loadedData)=>{
   const camelot= new CamelotWheel(globalApplicationState);
   const heatmap = new HeatMap(globalApplicationState);
   const main = new MainGraph(globalApplicationState);
-  const chart = new ListChart(globalApplicationState, 'bpm'); //default value is bpm...
+  const chart = new ListChart(globalApplicationState);
   
   globalApplicationState.heatmap = heatmap;
   globalApplicationState.camelot = camelot;
