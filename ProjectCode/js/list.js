@@ -1,7 +1,7 @@
 const CELL_HEIGHT = 20;
 const SIZE_DICT = {
   pop: 65,
-  track: 300,
+  track: 400,
   artist: 200,
   attribute: 65,
 };
@@ -17,7 +17,7 @@ class ListChart {
     this.header = [
       { name: "Popularity", key: "pop" },
       { name: "Track", key: "track" },
-      { name: "Artist", key: "artist" },
+     // { name: "Artist", key: "artist" },
       { name: this.yV, key: "attribute" },
     ];
 
@@ -88,9 +88,8 @@ class ListChart {
     this.formattedData = this.data.map((d) => {
       return {
         pop: d.track_pop,
-        art: {img: d.image, song:d.songplay, t: d.name}, 
-       
-        artist: d.artist,
+        art: {img: d.image, song:d.songplay, track: d.name, release: d.release_date, artist: d.artist}, 
+      // artist: d.artist,
         attribute: d[this.yV], //value changes with toggle...
         // danceability: d.danceability,
         // energy: d.energy,
@@ -118,20 +117,23 @@ class ListChart {
       .join("td")
       .text((d) => d.key !== 'art' ? d.value : null);
 
-    
-      const imgCell = allRows.filter(d=>d.key==='art')
+      let imgCell = allRows.filter(d=>d.key==='art').append('div').attr('class', 'ldiv')
 
-      imgCell.selectAll('img')
-        .data(d=>[d.value])
-        .enter()
-        .append('img')
-        .attr('src', d=>d.img).attr('width',100).attr('height', 100)
+      var img = imgCell.selectAll('img')
+      .data(d=>[d.value])
+      .enter()
+      .append('img')
+      .attr('src', d=>d.img)
+      .attr('width','100')
+      .attr('height', '100')
+      .attr('class', 'listImage')
+      
       imgCell.selectAll('text')
       .data(d=>[d.value])
       .enter()
       .append('text')
-      .text(d=>d.t)
-  
+      .html(function(d,i){ return '<h4>' + d.track + '</h4>'  + '<p> Artist: ' + d.artist +  '</br> Release Date: ' + d.release + '</p>' })
+      .attr('class', 'listTrack')
   }
 
   sorter(keyword) {

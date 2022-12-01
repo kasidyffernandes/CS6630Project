@@ -83,7 +83,7 @@ class CamelotWheel {
         .attr('fill', 'blue')
         .attr('font-size', '20px')
         .on('mouseover', function(d){
-          infotip.transition().duration(200).style('visibility', 'visible')
+          infotip.transition().duration(200).style('visibility', 'hidden')
          let  string = "<h1>The Camelot wheel</h1> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque et ligula at enim tincidunt suscipit.  \n  <img src= data/CamelotWheel.jpg width='300' height=300 />";
          infotip.html(string)
          .style('top', d.pageY -10 + 'px')

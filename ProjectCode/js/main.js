@@ -15,7 +15,8 @@ class MainGraph {
         .attr("height", height + margin.top + margin.bottom)
         .attr("style", "outline: thin solid black;") 
       .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")   
+
     
     this.main.append('text')
       .attr('class', 'title')
@@ -169,9 +170,11 @@ class MainGraph {
       })  
     const brushsvg = this.main.append('g').attr('class', 'brush').call(brush)
     function clearBrush(){
+    
       d3.selectAll('circle').attr('opacity', .6).transition()
       brushsvg.call(d3.brush().clear)
-    }
+      }
+    
 
     let dots = this.main.append('g')
     dots.selectAll('circle')
@@ -216,9 +219,19 @@ class MainGraph {
 
   }
   brushed({selection}){
-    let dots = d3.select('#one').selectAll('circle')
+    let dots
+    if(d3.select('.reset').attr('visibility' )== 'visible'){
+      dots = d3.selectAll("circle:not([opacity='0'])")}
+      
+    else
+      dots = d3.select('#one').selectAll('circle')
       .attr('opacity', '.2')
       .attr('class', 'non-brushed')
+
+    
+//    console.log( d3.selectAll("circle:not([fill='black'])"))
+   console.log('clearing')
+   
     const [[x0,y0], [x1,y1]] = selection
     globalApplicationState.brushedData = dots.filter(function(){
       return x0 <= d3.select(this).attr('cx')
@@ -235,16 +248,29 @@ class MainGraph {
   highlighting(selected, i){
 
     if(selected){
-      d3.selectAll('circle').attr('opacity', '.6')
+      d3.selectAll("circle:not([opacity='1'])").attr('opacity', '.2').attr('fill', 'grey')
+      console.log( d3.selectAll("circle:not([fill='grey'])"))
       d3.selectAll('circle').filter(d=> d['camelot'] == i.key)
         .attr('fill', i.color).attr('stroke', 'black').attr('opacity', '1')
     }
 
     else{
+      d3.selectAll('circle').filter(d=> d['camelot'] == i.key)
+        .attr('stroke', 'none').attr('fill', 'grey').attr('opacity', '.2')
+        //.attr('fill',  d=> d['app'] == 'tiktok' ? "#69b3a2" : '#ac87ff').attr('opacity', '0')
+      if(d3.selectAll("circle:not([fill='grey'])").empty()){
+     this.resetting()
+      }
+
+     /*if(!d3.selectAll("circle:not([fill='grey'])")._groups.length == 0){
+       this.resetting()
+     }else{
       console.log(selected)
       d3.selectAll('circle').filter(d=> d['camelot'] == i.key)
-        .attr('stroke', 'none').attr('fill',  d=> d['app'] == 'tiktok' ? "#69b3a2" : '#ac87ff').attr('opacity', '.6')
-    }
+        .attr('stroke', 'none').attr('fill',  d=> d['app'] == 'tiktok' ? "#69b3a2" : '#ac87ff').attr('opacity', '0')
+    
+     }*/
+      }
   }
 
 }
