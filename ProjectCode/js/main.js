@@ -13,7 +13,7 @@ class MainGraph {
       .append("svg")
         .attr("width", width+ margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
-        .attr("style", "outline: thin solid black;") 
+      //  .attr("style", "outline: thin solid black;") 
       .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")   
 
@@ -261,15 +261,6 @@ class MainGraph {
       if(d3.selectAll("circle:not([fill='grey'])").empty()){
      this.resetting()
       }
-
-     /*if(!d3.selectAll("circle:not([fill='grey'])")._groups.length == 0){
-       this.resetting()
-     }else{
-      console.log(selected)
-      d3.selectAll('circle').filter(d=> d['camelot'] == i.key)
-        .attr('stroke', 'none').attr('fill',  d=> d['app'] == 'tiktok' ? "#69b3a2" : '#ac87ff').attr('opacity', '0')
-    
-     }*/
       }
   }
 

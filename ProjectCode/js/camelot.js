@@ -6,31 +6,31 @@ class CamelotWheel {
       const data = Array.from(d1)
 
       const colordata = [
-        {key:"0A", color:'#b3ffed', sort:"a", l:'Ab', text:'A-Flat Minor'},
-        {key:"1A", color:'#bfffca', sort:"b", l:'Eb', text:'E-Flat Minor'},
-        {key:"2A", color:'#ccfcac', sort:"c", l:'Bb', text:'B-Flat Minor'},
-        {key:"3A", color:'#deeaa7', sort:"d", l:'F', text:'F Minor'},
-        {key:"4A", color:'#f0cda7', sort:"e", l:'C', text:'C Minor'},
-        {key:"5A", color:'#feb3b3', sort:"f", l:'G', text:'G Minor'},
-        {key:"6A", color:'#fbaec5', sort:"g", l:'D', text:'D Minor'},
-        {key:"7A", color:'#e9aee1', sort:"h", l:'A', text:'A Minor'},
-        {key:"8A", color:'#d5aef9', sort:"i", l:'E', text:'E Minor'},
-        {key:"9A", color:'#c6bcff', sort:"j", l:'B', text:'B Minor'},
-        {key:"10A", color:'#b9ddff', sort:"k", l:'F#', text:'F-Sharp Minor'},
-        {key:"11A", color:'#b0f8fd', sort:"l", l:'Db', text:'D-Flat Minor'},
+        {key:"1A", color:'#b3ffed', sort:"a", l:'Ab', text:'A-Flat Minor'},
+        {key:"2A", color:'#bfffca', sort:"b", l:'Eb', text:'E-Flat Minor'},
+        {key:"3A", color:'#ccfcac', sort:"c", l:'Bb', text:'B-Flat Minor'},
+        {key:"4A", color:'#deeaa7', sort:"d", l:'F', text:'F Minor'},
+        {key:"5A", color:'#f0cda7', sort:"e", l:'C', text:'C Minor'},
+        {key:"6A", color:'#feb3b3', sort:"f", l:'G', text:'G Minor'},
+        {key:"7A", color:'#fbaec5', sort:"g", l:'D', text:'D Minor'},
+        {key:"8A", color:'#e9aee1', sort:"h", l:'A', text:'A Minor'},
+        {key:"9A", color:'#d5aef9', sort:"i", l:'E', text:'E Minor'},
+        {key:"10A", color:'#c6bcff', sort:"j", l:'B', text:'B Minor'},
+        {key:"11A", color:'#b9ddff', sort:"k", l:'F#', text:'F-Sharp Minor'},
+        {key:"12A", color:'#b0f8fd', sort:"l", l:'Db', text:'D-Flat Minor'},
 
-        {key:"0B", color:'#86ffe5', sort:"m", l:'B', text:'B-Major'},
-        {key:"1B", color:'#99ffad', sort:"n", l:'F#', text:'F-Sharp Major'},
-        {key:"2B", color:'#b0fa7c', sort:"o", l:'Db', text:'D-Flat Major'},
-        {key:"3B", color:'#c7e173', sort:"p", l:'Ab', text:'A-Flat Major'},
-        {key:"4B", color:'#e5b573', sort:"q", l:'Eb', text:'E-Flat Major'},
-        {key:"5B",color:'#fc7e99', sort:"r", l:'Bb', text:'B-Flat Major'},
-        {key:"6B", color:'#e57ec2', sort:"s", l:'F', text:'F Major'},
-        {key:"7B", color:'#c47eed', sort:"t", l:'C', text:'C Major'},
-        {key:"8B",color:'#ac87ff', sort:"u", l:'G', text:'G Major'},
-        {key:"9B", color:'#97b5ff', sort:"v", l:'D', text:'D Major'},
-        {key:"10B", color:'#85ebfd', sort:"w", l:'A', text:'A Major'},
-        {key:"11B", color:'#82fff0', sort:"x", l:'E', text:'E Major'}
+        {key:"1B", color:'#86ffe5', sort:"m", l:'B', text:'B-Major'},
+        {key:"2B", color:'#99ffad', sort:"n", l:'F#', text:'F-Sharp Major'},
+        {key:"3B", color:'#b0fa7c', sort:"o", l:'Db', text:'D-Flat Major'},
+        {key:"4B", color:'#c7e173', sort:"p", l:'Ab', text:'A-Flat Major'},
+        {key:"5B", color:'#e5b573', sort:"q", l:'Eb', text:'E-Flat Major'},
+        {key:"6B",color:'#fc7e99', sort:"r", l:'Bb', text:'B-Flat Major'},
+        {key:"7B", color:'#e57ec2', sort:"s", l:'F', text:'F Major'},
+        {key:"8B", color:'#c47eed', sort:"t", l:'C', text:'C Major'},
+        {key:"9B",color:'#ac87ff', sort:"u", l:'G', text:'G Major'},
+        {key:"10B", color:'#97b5ff', sort:"v", l:'D', text:'D Major'},
+        {key:"11B", color:'#85ebfd', sort:"w", l:'A', text:'A Major'},
+        {key:"12B", color:'#82fff0', sort:"x", l:'E', text:'E Major'}
         ];
         this.dataResult = [];
         colordata.forEach((v)=>{
@@ -146,7 +146,7 @@ class CamelotWheel {
       let ayScale = d3.scaleRadial()
         .range([innerRadius, 0])
         .domain([0,d3.max(data.map(d=>d['1']))])
-        console.log(ayScale(0), byScale(0))
+       // console.log(ayScale(0), byScale(0))
 
         this.camelot.append('g')
         .selectAll('path')

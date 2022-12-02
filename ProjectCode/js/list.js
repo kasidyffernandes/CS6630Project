@@ -88,7 +88,7 @@ class ListChart {
     this.formattedData = this.data.map((d) => {
       return {
         pop: d.track_pop,
-        art: {img: d.image, song:d.songplay, track: d.name, release: d.release_date, artist: d.artist}, 
+        art: {img: d.image, song:d.songplay, track: d.name, release: d.release_date, artist: d.artist, url: d.url}, 
       // artist: d.artist,
         attribute: d[this.yV], //value changes with toggle...
         // danceability: d.danceability,
@@ -116,8 +116,24 @@ class ListChart {
       .data((d) => d3Entries(d))
       .join("td")
       .text((d) => d.key !== 'art' ? d.value : null);
-
-      let imgCell = allRows.filter(d=>d.key==='art').append('div').attr('class', 'ldiv')
+      
+      let imgCell = allRows.filter(d=>d.key==='art')
+        .append('div')
+        .attr('class', 'ldiv')
+        .on('mouseover', function(d,i,){
+            d3.selectAll('circle').filter(d=> d.url == i.value.url)
+            .transition()
+            .attr('fill', 'red')
+            .attr('opacity', '1' )
+            .attr('r', 6)
+            .attr('stroke', 'black')
+      }).on('mouseout',function(d,i){
+            d3.selectAll('circle').filter(d=> d.url == i.value.url).transition()
+            .attr('fill', d=>globalApplicationState.main.colorScale(d))
+            .attr('opacity', '.6' )
+            .attr('r', 4)
+            .attr('stroke', 'none')
+      } )
 
       var img = imgCell.selectAll('img')
       .data(d=>[d.value])
@@ -134,6 +150,8 @@ class ListChart {
       .append('text')
       .html(function(d,i){ return '<h4>' + d.track + '</h4>'  + '<p> Artist: ' + d.artist +  '</br> Release Date: ' + d.release + '</p>' })
       .attr('class', 'listTrack')
+
+
   }
 
   sorter(keyword) {
