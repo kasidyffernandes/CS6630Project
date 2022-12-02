@@ -61,7 +61,6 @@ class MainGraph {
         d3.selectAll('circle').filter(d=>d['app'] == 'spotify').transition().attr('opacity', .6)
       })
       .on('click', function(d){
-        console.log('spot')
         let copacity= parseFloat(d3.selectAll('circle').filter(d=>[d.app] == 'spotify').attr('opacity'))
         if(copacity > 0){
           d3.select('.reset').attr('visibility', 'visible')
@@ -162,9 +161,13 @@ class MainGraph {
       .on('end', function(d){
         if(globalApplicationState.brushedData.length == 0){
           globalApplicationState.chart.updateTable(globalApplicationState.data)
+          globalApplicationState.camelot.updateTable(globalApplicationState.data)
+
           clearBrush()
         }else{
+        
           //still need to revert to rull data when not selected...
+          globalApplicationState.camelot.updateTable(globalApplicationState.brushedData)
           globalApplicationState.chart.updateTable(globalApplicationState.brushedData)
         }
       })  
@@ -188,9 +191,8 @@ class MainGraph {
      // .attr("fill", d=> d['app'] == 'tiktok' ? "#69b3a2" : '#ac87ff')
       .attr('opacity', '.6')
       .on('mouseover', function(d,i){
-
           Tooltip.style('visibility', 'visible')
-          .html(i.name + '</br>' + i.artist + '</br>'+ i.camelot)
+          .html(i.name + '</br>' + i.artist + '</br>'+ i[yVar])
           .style('text-transform', 'capitalize')
       })
       .on('mousemove', function(d){
@@ -203,7 +205,6 @@ class MainGraph {
       }) 
   }
   updateTable(yVar){
-    console.log('updating')
     let svg = this.main.transition()
     if(yVar == 'bpm'){
       this.yScale.domain([0,d3.max(this.data.map(d=>+d[yVar]))])
@@ -230,7 +231,7 @@ class MainGraph {
 
     
 //    console.log( d3.selectAll("circle:not([fill='black'])"))
-   console.log('clearing')
+
    
     const [[x0,y0], [x1,y1]] = selection
     globalApplicationState.brushedData = dots.filter(function(){
@@ -249,7 +250,6 @@ class MainGraph {
 
     if(selected){
       d3.selectAll("circle:not([opacity='1'])").attr('opacity', '.2').attr('fill', 'grey')
-      console.log( d3.selectAll("circle:not([fill='grey'])"))
       d3.selectAll('circle').filter(d=> d['camelot'] == i.key)
         .attr('fill', i.color).attr('stroke', 'black').attr('opacity', '1')
     }

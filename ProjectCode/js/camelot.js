@@ -4,8 +4,9 @@ class CamelotWheel {
       this.globalApplicationState = globalApplicationState;
       let d1 = d3.rollup(this.globalApplicationState.data, v=> v.length, d=>d.camelot)
       const data = Array.from(d1)
+      
 
-      const colordata = [
+      this.colordata = [
         {key:"1A", color:'#b3ffed', sort:"a", l:'Ab', text:'A-Flat Minor'},
         {key:"2A", color:'#bfffca', sort:"b", l:'Eb', text:'E-Flat Minor'},
         {key:"3A", color:'#ccfcac', sort:"c", l:'Bb', text:'B-Flat Minor'},
@@ -32,14 +33,7 @@ class CamelotWheel {
         {key:"11B", color:'#85ebfd', sort:"w", l:'A', text:'A Major'},
         {key:"12B", color:'#82fff0', sort:"x", l:'E', text:'E Major'}
         ];
-        this.dataResult = [];
-        colordata.forEach((v)=>{
-          data.forEach((p)=>{
-            if(p[0] == v.key){
-              this.dataResult.push(Object.assign({},v,p))
-            }
-          })
-        })
+
         this.margin = {top: 10, right: 10, bottom: 10, left: 10},
         this.width = 460 - this.margin.left - this.margin.right,
         this.height = 460 - this.margin.top - this.margin.bottom
@@ -69,7 +63,7 @@ class CamelotWheel {
         .attr('text-anchor', 'top')
         .text('Camelot Key Wheel')
 
-        this.drawTable()
+        this.drawTable(data,this.colordata)
         this.camelot.append('text')
         .attr('class', 'title')
         .attr('transform', "translate(0,-200)")
@@ -83,7 +77,7 @@ class CamelotWheel {
         .attr('fill', 'blue')
         .attr('font-size', '20px')
         .on('mouseover', function(d){
-          infotip.transition().duration(200).style('visibility', 'hidden')
+          infotip.transition().duration(200).style('visibility', 'visible')
          let  string = "<h1>The Camelot wheel</h1> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque et ligula at enim tincidunt suscipit.  \n  <img src= data/CamelotWheel.jpg width='300' height=300 />";
          infotip.html(string)
          .style('top', d.pageY -10 + 'px')
@@ -96,10 +90,20 @@ class CamelotWheel {
       .style("visibility", 'hidden') 
     })
     }
-    drawTable(){
+    drawTable(d1){
+      let dataResult = [];
+      this.colordata.forEach((v)=>{
+        d1.forEach((p)=>{
+          if(p[0] == v.key){
+            dataResult.push(Object.assign({},v,p))
+          }
+        })
+      })
       let ischecked = d3.select('#toggle').property('checked')
-      let data = this.dataResult
+      let data = dataResult
+   
       data = data.sort(function(a,b){return d3.ascending(a.sort, b.sort)})
+
       this.camelot.append('rect')
       .attr('class', 'ctooltip')
       .attr("x", -100)
@@ -333,9 +337,16 @@ class CamelotWheel {
 
       })
     }
-    updateTable(){
-     // console.log('db')
-     // console.log(globalApplicationState.brushedData)
+    updateTable(d1){
+      let cdata= d3.rollup(d1, v=> v.length, d=>d.camelot)
+      d3.selectAll('.dual').remove()
+      d3.selectAll('.single').remove()
+      d3.selectAll('.slabel').remove()
+      d3.selectAll('.dlabel').remove()
+      const data = Array.from(cdata)
+  
+      this.drawTable(data)
+
     }
 
 }

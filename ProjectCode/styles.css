@@ -89,7 +89,7 @@ tr:nth-of-type(2n){
       border: 0px;                   
       border-radius: 8px;        
       pointer-events: none;  
-      visibility: hidden;        
+      visibility: visible;        
   }
         
 .ldiv{
