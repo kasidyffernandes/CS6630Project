@@ -33,7 +33,7 @@
 }
 
 tr:nth-of-type(2n){
-      background-color: lightgrey;
+      /* background-color: lightgrey; */
 }
 .title{
       font-size: 24px;
@@ -58,7 +58,7 @@ tr:nth-of-type(2n){
     }
     
 .header-text {
-      font-size: 11px;
+      font-size: 18px;
       text-anchor: middle;
       font-weight: 700;
 }

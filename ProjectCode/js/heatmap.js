@@ -1,6 +1,6 @@
 const margin = { top: 30, right: 30, bottom: 30, left: 30 },
-  width = 800 - margin.left - margin.right,
-  height = 450 - margin.top - margin.bottom;
+  width = 700 - margin.left - margin.right,
+  height = 600 - margin.top - margin.bottom;
 
 class HeatMap {
   constructor(globalApplicationState) {
@@ -24,70 +24,70 @@ class HeatMap {
       mapData.push([
         `T${i + 1}`,
         "A1",
-        parseFloat(track.danceability),
+        parseFloat(track.acousticness),
         track.name,
         track.artist,
       ]);
       mapData.push([
         `T${i + 1}`,
         "A2",
-        parseFloat(track.energy),
+        parseFloat(track.danceability),
         track.name,
         track.artist,
       ]);
       mapData.push([
         `T${i + 1}`,
         "A3",
-        parseFloat(track.instrumentalness),
+        parseFloat(track.energy),
         track.name,
         track.artist,
       ]);
       mapData.push([
         `T${i + 1}`,
         "A4",
-        parseFloat(track.liveness),
+        parseFloat(track.instrumentalness),
         track.name,
         track.artist,
       ]);
       mapData.push([
         `T${i + 1}`,
         "A5",
-        parseFloat(track.speechiness),
+        parseFloat(track.liveness),
         track.name,
         track.artist,
       ]);
       mapData.push([
         `T${i + 1}`,
         "A6",
-        parseFloat(track.valence),
+        parseFloat(track.speechiness),
         track.name,
         track.artist,
       ]);
       mapData.push([
         `T${i + 1}`,
         "A7",
-        parseFloat(track.bpm),
+        parseFloat(track.valence),
         track.name,
         track.artist,
       ]);
       mapData.push([
         `T${i + 1}`,
         "A8",
-        parseFloat(track.loudness),
+        parseFloat(track.bpm),
         track.name,
         track.artist,
       ]);
       mapData.push([
         `T${i + 1}`,
         "A9",
-        parseFloat(track.duration_ms),
+        parseFloat(track.loudness),
         track.name,
         track.artist,
       ]);
       mapData.push([
         `T${i + 1}`,
         "A10",
-        parseFloat(track.acousticness),
+        parseFloat(track.duration_ms),
         track.name,
         track.artist,
       ]);
@@ -99,7 +99,7 @@ class HeatMap {
     this.heatmap = d3
       .select("#heatmap")
       .append("svg")
-      .attr("width", width / 2 + margin.left + margin.right)
+      .attr("width", width  + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
       .attr("style", "outline: thin solid black;")
       .append("g")
@@ -149,7 +149,7 @@ class HeatMap {
     //Axis
     this.x = d3
       .scaleBand()
-      .range([0, width / 2])
+      .range([0, width])
       .domain(attributes)
       .padding(0.01);
 
@@ -168,8 +168,11 @@ class HeatMap {
     //selecting the top 25 from the data:
     let selection = this.data.slice(0, 25);
 
-    //Color scales
+    //0-1 color scales
     let colorRange = ["white", "#69b3a2"];
+
+    //discrete value scales
+    let colorRangeDisc = ["white", "#6987b3"]
 
     //determine min/max for bpm, loudness, duration and instrumentalness scales
     let [bpmMIN, bpmMAX] = d3.extent(
@@ -184,18 +187,17 @@ class HeatMap {
     let [instMIN, instMAX] = d3.extent(
       selection.map((d) => parseFloat(d["instrumentalness"]))
     );
-    console.log("Inst. Min: " + instMIN + " Inst. Max: " + instMAX);
 
     //attribute scales
     let attrColor = d3.scaleLinear().range(colorRange).domain([0, 1]);
-    let bmpColor = d3.scaleLinear().range(colorRange).domain([bpmMIN, bpmMAX]);
+    let bmpColor = d3.scaleLinear().range(colorRangeDisc).domain([bpmMIN, bpmMAX]);
     let loudColor = d3
       .scaleLinear()
-      .range(colorRange)
+      .range(colorRangeDisc)
       .domain([loudMIN, loudMAX]);
     let lengthColor = d3
       .scaleLinear()
-      .range(colorRange)
+      .range(colorRangeDisc)
       .domain([lengthMIN, lengthMAX]);
 
     let instColor = d3
@@ -217,7 +219,7 @@ class HeatMap {
 
 
     this.heatmap
-      .selectAll("rect")
+      .selectAll()
       .data(mappedData)
       .join((enter) =>
         enter
@@ -227,13 +229,13 @@ class HeatMap {
           .attr("height", this.y.bandwidth())
           .attr("width", this.x.bandwidth())
           .attr("fill", (d) => {
-            if (d[1] === "A7") {
+            if (d[1] === "A8") {
               return bmpColor(d[2]);
-            } else if (d[1] === "A8") {
-              return loudColor(d[2]);
             } else if (d[1] === "A9") {
+              return loudColor(d[2]);
+            } else if (d[1] === "A10") {
               return lengthColor(d[2]);
-            } else if (d[1] === "A3") {
+            } else if (d[1] === "A4") {
               return instColor(d[2]);
             } else {
               return attrColor(d[2]);
@@ -267,25 +269,25 @@ class HeatMap {
           //.text(d => {if (i[1] === "A1"){return "Dance"}})
           .html((d) => {
             let title = "";
-            if (i[1] === "A1") {
+            if (i[1] === "A2") {
               title = "Danceability";
-            } else if (i[1] === "A2") {
-              title = "Energy";
             } else if (i[1] === "A3") {
-              title = "Instrumentalness";
+              title = "Energy";
             } else if (i[1] === "A4") {
-              title = "Liveness";
+              title = "Instrumentalness";
             } else if (i[1] === "A5") {
-              title = "Speechiness";
+              title = "Liveness";
             } else if (i[1] === "A6") {
-              title = "Valence";
+              title = "Speechiness";
             } else if (i[1] === "A7") {
-              title = "BPM";
+              title = "Valence";
             } else if (i[1] === "A8") {
-              title = "Loudness";
+              title = "BPM";
             } else if (i[1] === "A9") {
-              title = "Duration";
+              title = "Loudness";
             } else if (i[1] === "A10") {
+              title = "Duration";
+            } else if (i[1] === "A1") {
               title = "Acousticness";
             }
             return i[3] + "</br>" + i[4] + "</br>" + title + ": " + i[2];

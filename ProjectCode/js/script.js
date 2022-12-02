@@ -42,7 +42,7 @@ loadData().then((loadedData)=>{
     var updated = d3.select(this).property('value')
     main.updateTable(updated)
     d3.selectAll('.brush').call(d3.brush().clear)
-
+    globalApplicationState.chart.updateTable(globalApplicationState.data);
     //MOVED to main.js 157
 /*
     //need boolean for if brushed or not?

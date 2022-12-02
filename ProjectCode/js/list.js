@@ -1,8 +1,8 @@
 const CELL_HEIGHT = 20;
 const SIZE_DICT = {
   pop: 65,
-  track: 400,
-  artist: 200,
+  track: 300,
+  //artist: 150,
   attribute: 65,
 };
 
@@ -37,8 +37,8 @@ class ListChart {
       .slice(0, 50);
     console.log(top);
 
-    this.makeHeader();
     this.updateTable(this.data);
+    this.makeHeader();
   }
 
   makeHeader() {
@@ -80,7 +80,6 @@ class ListChart {
 
   updateTable(data) {
     this.data = data;
-    // let yVal = d3.select("#yAxis").property('value');
     this.updateHeader(this.yV);
 
     //format data for table using filters...
@@ -194,7 +193,7 @@ class ListChart {
       //can you not change the other ones?
       { name: "Popularity", key: "pop" },
       { name: "Track", key: "track" },
-      { name: "Artist", key: "artist" },
+      //{ name: "Artist", key: "artist" },
       { name: this.yV, key: "attribute" },
     ];
 
