@@ -21,13 +21,7 @@ const globalApplicationState = {
 loadData().then((loadedData)=>{
  
   globalApplicationState.data = loadedData.data;
- /*
-  let h = d3.select('#header')
-  const img = loadedData.tiktok[1].image
-  console.log(img)
-  h.append('img').attr('src', img).attr('width', 100)
-    .attr('height', 100)
-*/
+
   const camelot= new CamelotWheel(globalApplicationState);
   const heatmap = new HeatMap(globalApplicationState);
   const main = new MainGraph(globalApplicationState);
@@ -54,8 +48,8 @@ loadData().then((loadedData)=>{
   })
 
   d3.select('#toggle').on('click', (d)=>{
-    console.log('toggle')
-    globalApplicationState.camelot.drawTable();
+    globalApplicationState.main.resetting();
+    globalApplicationState.camelot.updateTable(globalApplicationState.data);
 });
 })
 

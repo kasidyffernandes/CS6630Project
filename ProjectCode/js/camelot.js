@@ -140,7 +140,7 @@ class CamelotWheel {
 
      let byScale = d3.scaleRadial()
        .range([110, Math.min(this.width, this.height)/2])
-       .domain([0,d3.max(data.map(d=>d['1']))])
+       .domain([0, 85])
 
       let axScale = d3.scaleBand()
         .range([0,2*Math.PI])
@@ -149,7 +149,7 @@ class CamelotWheel {
 
       let ayScale = d3.scaleRadial()
         .range([innerRadius, 0])
-        .domain([0,d3.max(data.map(d=>d['1']))])
+        .domain([0,85])
        // console.log(ayScale(0), byScale(0))
 
         this.camelot.append('g')
@@ -270,7 +270,7 @@ class CamelotWheel {
 
     let yScale = d3.scaleRadial()
       .range([80, Math.min(this.width, this.height)/2])
-      .domain([0,d3.max(data.map(d=>d['1']))])
+      .domain([0,85])
   
 
     this.camelot.append('g')

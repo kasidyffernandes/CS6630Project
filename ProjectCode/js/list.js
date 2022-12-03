@@ -1,7 +1,7 @@
 const CELL_HEIGHT = 20;
 const SIZE_DICT = {
   pop: 65,
-  track: 300,
+  track: 500,
   //artist: 150,
   attribute: 65,
 };
@@ -20,7 +20,8 @@ class ListChart {
      // { name: "Artist", key: "artist" },
       { name: this.yV, key: "attribute" },
     ];
-
+   
+  
     this.table = d3.select("#table");
     this.tableBody = d3.select("#tbody");
 
@@ -87,7 +88,7 @@ class ListChart {
     this.formattedData = this.data.map((d) => {
       return {
         pop: d.track_pop,
-        art: {img: d.image, song:d.songplay, track: d.name, release: d.release_date, artist: d.artist, url: d.url}, 
+        art: {img: d.image, song: d.songplay, track: d.name, release: d.release_date, artist: d.artist, url: d.url, app: d.app}, 
       // artist: d.artist,
         attribute: d[this.yV], //value changes with toggle...
         // danceability: d.danceability,
@@ -115,7 +116,7 @@ class ListChart {
       .data((d) => d3Entries(d))
       .join("td")
       .text((d) => d.key !== 'art' ? d.value : null);
-      
+ 
       let imgCell = allRows.filter(d=>d.key==='art')
         .append('div')
         .attr('class', 'ldiv')
@@ -133,8 +134,18 @@ class ListChart {
             .attr('r', 4)
             .attr('stroke', 'none')
       } )
+      let svgcon = imgCell.append('svg').attr('width', 20).attr('height', 100)
+      var rectangle = svgcon.selectAll("rect")
+      .data(d=>[d.value])
+      .enter()
+      .append('rect')
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("width", 20)
+      .attr("height", 100).attr('fill', d=>d.app == 'tiktok' ?   "#69b3a2" :  "#ac87ff")
+       //  d.app == 'tiktok' ?   "#69b3a2" :  "#ac87ff")
 
-      var img = imgCell.selectAll('img')
+      let img = imgCell.selectAll('img')
       .data(d=>[d.value])
       .enter()
       .append('img')
@@ -142,6 +153,10 @@ class ListChart {
       .attr('width','100')
       .attr('height', '100')
       .attr('class', 'listImage')
+      .on('click', function(d,i){
+        let songPlayer = d3.select('#songplayer').attr('width',150).attr('height', 150)
+        songPlayer.append('iframe').attr('src', `https://open.spotify.com/embed?uri=${i.url}`).attr('width',150).attr('height', 150)
+      })
       
       imgCell.selectAll('text')
       .data(d=>[d.value])
@@ -149,8 +164,8 @@ class ListChart {
       .append('text')
       .html(function(d,i){ return '<h4>' + d.track + '</h4>'  + '<p> Artist: ' + d.artist +  '</br> Release Date: ' + d.release + '</p>' })
       .attr('class', 'listTrack')
-
-
+      
+     
   }
 
   sorter(keyword) {

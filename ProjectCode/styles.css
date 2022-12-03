@@ -96,12 +96,15 @@ tr:nth-of-type(2n){
       display: flex;
       align-items:left; 
       position: relative;
-   
+      width: 500px;
       font: 18px sans-serif;   
       background: grey; 
       border: 0px;   
 }
 
+.songtip{
+      float: right;
+}
 .listTrack{
    
      vertical-align: center;
