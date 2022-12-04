@@ -1,5 +1,5 @@
 .wrapper {
-
+      font-family: sans-serif;
     width: 100%;
     height: 100%;
   }
@@ -37,7 +37,7 @@ tr:nth-of-type(2n){
       background-color: lightgrey;
 }
 .title{
-      font-size: 24px;
+      font-size: 22px;
       font-weight: bold;
       text-anchor: middle;
 }
@@ -63,8 +63,23 @@ tr:nth-of-type(2n){
       text-anchor: middle;
       font-weight: 700;
 }
+.spotify-text {
+      color: #ac87ff;
+}
+.tiktok-text {
+      color: #69b3a2;
+}
+
+.attribute-text {
+      color: #69b3a2;
+}
+
+.discrete-text {
+      color: #6987b3;
+}
+
 .ctooltip{
-      position: absolute;
+      position: absolute; 
       height: 200px;
       width: 200px;
       fill: white;
@@ -98,7 +113,7 @@ tr:nth-of-type(2n){
 
 .infotip {                 
       position: absolute;    
-      text-align: center;      
+      text-align: center;     
       width: 400px;             
       height: 428px;                
       padding: 2px;                  

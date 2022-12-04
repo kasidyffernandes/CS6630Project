@@ -101,7 +101,6 @@ class HeatMap {
       .append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
-      .attr("style", "outline: thin solid black;")
       .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -258,25 +257,7 @@ class HeatMap {
             }),
         (exit) => exit.remove()
       )
-      // .enter()
-      // .append("rect")
-      // .attr("y", (d) => this.y(d[0]))
-      // .attr("x", (d) => this.x(d[1]))
-      // .attr("height", this.y.bandwidth())
-      // .attr("width", this.x.bandwidth())
-      // .attr("fill", (d) => {
-      //   if (d[1] === "A7") {
-      //     return bmpColor(d[2]);
-      //   } else if (d[1] === "A8") {
-      //     return loudColor(d[2]);
-      //   } else if (d[1] === "A9") {
-      //     return lengthColor(d[2]);
-      //   } else if (d[1] === "A3") {
-      //     return instColor(d[2]);
-      //   } else {
-      //     return attrColor(d[2]);
-      //   }
-      //})
+     
       .on("mouseover", function (d, i) {
         Tooltip.style("visibility", "visible")
           //.text(d => {if (i[1] === "A1"){return "Dance"}})
@@ -308,7 +289,7 @@ class HeatMap {
           .style("text-transform", "capitalize");
         //highlight circle on main graph as well
         d3.selectAll("circle")
-          .filter((d) => i[3] == d.name)
+          .filter((d) => (i[3] == d.name) && (i[4] == d.artist))
           .transition()
           .attr("fill", "red")
           .attr("opacity", "1")

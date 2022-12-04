@@ -59,7 +59,7 @@ class CamelotWheel {
 
          this.camelot.append('text')
         .attr('class', 'title')
-        .attr('transform', "translate(0,-200)")
+        .attr('transform', "translate(0,-300)")
         .attr('text-anchor', 'top')
         .text('Camelot Key Wheel')
 
@@ -78,7 +78,7 @@ class CamelotWheel {
         .attr('font-size', '20px')
         .on('mouseover', function(d){
           infotip.transition().duration(200).style('visibility', 'visible')
-         let  string = "<h1>The Camelot wheel</h1> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque et ligula at enim tincidunt suscipit.  \n  <img src= data/CamelotWheel.jpg width='300' height=300 />";
+         let  string = "<h1>The Camelot wheel</h1> The Camelot Wheel is a tool used by DJ's to quickly reference which songs will mix well in key based on their corresponding number value. If you are playing a song in one value, say 3A, it will sound good overlaid with any of the adjecent keys, so 2A, 4A and 3B.  \n  <img src= data/CamelotWheel.jpg width='300' height=300 />";
          infotip.html(string)
          .style('top', d.pageY -10 + 'px')
           .style('left', d.pageX - 400 + 'px')

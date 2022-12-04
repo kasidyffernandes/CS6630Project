@@ -1,9 +1,9 @@
 const CELL_HEIGHT = 20;
 const SIZE_DICT = {
-  pop: 65,
+  pop: 70,
   track: 500,
-  attribute: 125,
-  camelot: 65
+  attribute: 150,
+  camelot: 70
 };
 
 const PADDING = 15;
@@ -63,7 +63,7 @@ class ListChart {
       .style("text-anchor", "middle")
       .style("font-weight", "900")
       .attr("transform", (d) => {
-        return `translate(${SIZE_DICT[d.key] / 2}, 15)`;
+        return `translate(${SIZE_DICT[d.key] / 2}, 25)`;
       });
 
     th.on("click", (e, d) => {
@@ -225,7 +225,7 @@ class ListChart {
       .style("text-anchor", "middle")
       .style("font-weight", "900")
       .attr("transform", (d) => {
-        return `translate(${SIZE_DICT[d.key] / 2}, 15)`;
+        return `translate(${SIZE_DICT[d.key] / 2}, 25)`;
       });
   }
 }
