@@ -206,7 +206,8 @@ class MainGraph {
       .attr("x", -200)
       .attr("dy", "1em")
       .attr("text-anchor", "middle")
-      .text(yVar);
+      .text(yVar) 
+      .style('text-transform', 'capitalize');
 
     this.main
       .append("g")
