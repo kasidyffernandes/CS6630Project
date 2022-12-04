@@ -52,7 +52,6 @@ class CamelotWheel {
         let infotip = d3.select('#two')
           .append('div')
           .attr('class', 'infotip')
-          .style('background-color', 'lightgrey')
           .style('position', 'fixed')
           .style('visibility', 'hidden')
           let img = 'data/CamelotWheel.jpg'
@@ -136,16 +135,16 @@ class CamelotWheel {
        let bxScale = d3.scaleBand()
        .range([0,2*Math.PI])
        .align(0)
-       .domain(bdata.map(d=>d.key))
+       .domain(['1B', '2B', '3B', '4B', '5B', '6B', '7B', '8B', '9B', '10B', '11B', '12B'])
 
      let byScale = d3.scaleRadial()
        .range([110, Math.min(this.width, this.height)/2])
        .domain([0, 85])
-
+        console.log(adata.map(d=>d.key))
       let axScale = d3.scaleBand()
         .range([0,2*Math.PI])
         .align(0)
-        .domain(adata.map(d=>d.key))
+        .domain(['1A', '2A', '3A', '4A', '5A', '6A', '7A', '8A', '9A', '10A', '11A', '12A'])
 
       let ayScale = d3.scaleRadial()
         .range([innerRadius, 0])
