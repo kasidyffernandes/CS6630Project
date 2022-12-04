@@ -99,7 +99,7 @@ class HeatMap {
     this.heatmap = d3
       .select("#heatmap")
       .append("svg")
-      .attr("width", width  + margin.left + margin.right)
+      .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
       .attr("style", "outline: thin solid black;")
       .append("g")
@@ -147,11 +147,7 @@ class HeatMap {
     ];
 
     //Axis
-    this.x = d3
-      .scaleBand()
-      .range([0, width])
-      .domain(attributes)
-      .padding(0.01);
+    this.x = d3.scaleBand().range([0, width]).domain(attributes).padding(0.01);
 
     this.y = d3.scaleBand().range([0, height]).domain(tracks).padding(0.01);
 
@@ -172,7 +168,7 @@ class HeatMap {
     let colorRange = ["white", "#69b3a2"];
 
     //discrete value scales
-    let colorRangeDisc = ["white", "#6987b3"]
+    let colorRangeDisc = ["white", "#6987b3"];
 
     //determine min/max for bpm, loudness, duration and instrumentalness scales
     let [bpmMIN, bpmMAX] = d3.extent(
@@ -190,7 +186,10 @@ class HeatMap {
 
     //attribute scales
     let attrColor = d3.scaleLinear().range(colorRange).domain([0, 1]);
-    let bmpColor = d3.scaleLinear().range(colorRangeDisc).domain([bpmMIN, bpmMAX]);
+    let bmpColor = d3
+      .scaleLinear()
+      .range(colorRangeDisc)
+      .domain([bpmMIN, bpmMAX]);
     let loudColor = d3
       .scaleLinear()
       .range(colorRangeDisc)
@@ -215,35 +214,51 @@ class HeatMap {
 
     let mappedData = this.mapData(selection);
     console.log(mappedData);
-    
 
+    const rectangles = this.heatmap.selectAll("rect").data(mappedData);
 
-    this.heatmap
-      .selectAll()
-      .data(mappedData)
-      .join((enter) =>
-        enter
-          .append("rect")
-          .attr("y", (d) => this.y(d[0]))
-          .attr("x", (d) => this.x(d[1]))
-          .attr("height", this.y.bandwidth())
-          .attr("width", this.x.bandwidth())
-          .attr("fill", (d) => {
-            if (d[1] === "A8") {
-              return bmpColor(d[2]);
-            } else if (d[1] === "A9") {
-              return loudColor(d[2]);
-            } else if (d[1] === "A10") {
-              return lengthColor(d[2]);
-            } else if (d[1] === "A4") {
-              return instColor(d[2]);
-            } else {
-              return attrColor(d[2]);
-            }
-          })
-          ,
-        (exit) =>
-          exit.remove()
+    rectangles
+      .join(
+        (enter) =>
+          enter
+            .append("rect")
+            .attr("y", (d) => this.y(d[0]))
+            .attr("x", (d) => this.x(d[1]))
+            .attr("height", this.y.bandwidth())
+            .attr("width", this.x.bandwidth())
+            .attr("fill", (d) => {
+              if (d[1] === "A8") {
+                return bmpColor(d[2]);
+              } else if (d[1] === "A9") {
+                return loudColor(d[2]);
+              } else if (d[1] === "A10") {
+                return lengthColor(d[2]);
+              } else if (d[1] === "A4") {
+                return instColor(d[2]);
+              } else {
+                return attrColor(d[2]);
+              }
+            }),
+        (update) =>
+          update
+            .attr("y", (d) => this.y(d[0]))
+            .attr("x", (d) => this.x(d[1]))
+            .attr("height", this.y.bandwidth())
+            .attr("width", this.x.bandwidth())
+            .attr("fill", (d) => {
+              if (d[1] === "A8") {
+                return bmpColor(d[2]);
+              } else if (d[1] === "A9") {
+                return loudColor(d[2]);
+              } else if (d[1] === "A10") {
+                return lengthColor(d[2]);
+              } else if (d[1] === "A4") {
+                return instColor(d[2]);
+              } else {
+                return attrColor(d[2]);
+              }
+            }),
+        (exit) => exit.remove()
       )
       // .enter()
       // .append("rect")
@@ -293,6 +308,14 @@ class HeatMap {
             return i[3] + "</br>" + i[4] + "</br>" + title + ": " + i[2];
           })
           .style("text-transform", "capitalize");
+        //highlight circle on main graph as well
+        d3.selectAll("circle")
+          .filter((d) => i[3] == d.name)
+          .transition()
+          .attr("fill", "red")
+          .attr("opacity", "1")
+          .attr("r", 8)
+          .attr("stroke", "black");
       })
       .on("mousemove", function (d) {
         Tooltip.style("top", d.pageY - 10 + "px").style(
@@ -300,8 +323,15 @@ class HeatMap {
           d.pageX + 10 + "px"
         );
       })
-      .on("mouseout", function (d) {
+      .on("mouseout", function (d, i) {
         Tooltip.style("visibility", "hidden");
+        d3.selectAll("circle")
+          .filter((d) => i[3] == d.name)
+          .transition()
+          .attr("fill", (d) => globalApplicationState.main.colorScale(d))
+          .attr("opacity", ".6")
+          .attr("r", 4)
+          .attr("stroke", "none");
       });
   }
 }

@@ -2,8 +2,8 @@ const CELL_HEIGHT = 20;
 const SIZE_DICT = {
   pop: 65,
   track: 500,
-  //artist: 150,
   attribute: 65,
+  camelot: 65
 };
 
 const PADDING = 15;
@@ -15,10 +15,11 @@ class ListChart {
     this.yV = d3.select("#yAxis").property("value");
 
     this.header = [
-      { name: "Popularity", key: "pop" },
+      { name: "Pop.", key: "pop" },
       { name: "Track", key: "track" },
      // { name: "Artist", key: "artist" },
       { name: this.yV, key: "attribute" },
+      { name: "Camelot", key: "camelot"},
     ];
    
   
@@ -76,6 +77,7 @@ class ListChart {
 
     th.on("click", (e, d) => {
       this.sorter(d.key);
+      console.log("sorting by: ", d.key)
     });
   }
 
@@ -83,14 +85,15 @@ class ListChart {
     this.data = data;
     this.updateHeader(this.yV);
 
-    //format data for table using filters...
-    //adding all attributes on here...
+    
+    //adding all attributes on here in case we want to display more in the table
     this.formattedData = this.data.map((d) => {
       return {
         pop: d.track_pop,
         art: {img: d.image, song: d.songplay, track: d.name, release: d.release_date, artist: d.artist, url: d.url, app: d.app}, 
       // artist: d.artist,
         attribute: d[this.yV], //value changes with toggle...
+        camelot: d.camelot,
         // danceability: d.danceability,
         // energy: d.energy,
         // instrumentalness: d.instrumentalness,
@@ -125,7 +128,7 @@ class ListChart {
             .transition()
             .attr('fill', 'red')
             .attr('opacity', '1' )
-            .attr('r', 6)
+            .attr('r', 8)
             .attr('stroke', 'black')
       }).on('mouseout',function(d,i){
             d3.selectAll('circle').filter(d=> d.url == i.value.url).transition()
@@ -194,6 +197,10 @@ class ListChart {
           return this.sortAscend
             ? d3.descending(+a[key], +b[key])
             : d3.descending(+b[key], +a[key]);
+        case "camelot":
+            return this.sortAscend
+              ? a.camelot.localeCompare(b.camelot)
+              : b.camelot.localeCompare(a.camelot);
       }
     });
     //update with the sorted data:
@@ -206,10 +213,11 @@ class ListChart {
 
     this.header = [
       //can you not change the other ones?
-      { name: "Popularity", key: "pop" },
+      { name: "Pop.", key: "pop" },
       { name: "Track", key: "track" },
       //{ name: "Artist", key: "artist" },
       { name: this.yV, key: "attribute" },
+      { name: "Camelot", key: "camelot"}
     ];
 
     d3.select("#theader")
