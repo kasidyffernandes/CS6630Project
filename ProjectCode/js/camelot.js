@@ -52,7 +52,6 @@ class CamelotWheel {
         let infotip = d3.select('#two')
           .append('div')
           .attr('class', 'infotip')
-          .style('background-color', 'rgba(240, 240, 240, 0.624)')
           .style('position', 'fixed')
           .style('visibility', 'hidden')
           let img = 'data/CamelotWheel.jpg'
