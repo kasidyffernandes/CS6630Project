@@ -39,6 +39,7 @@ class ListChart {
       .append("thead")
       .append("tr")
       .attr("id", "theader")
+      
       .selectAll("th")
       .data(this.header)
       .join("th")

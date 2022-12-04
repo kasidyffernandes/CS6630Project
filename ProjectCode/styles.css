@@ -34,8 +34,10 @@
 }
 
 tr:nth-of-type(2n){
-      background-color: lightgrey;
+      background-color: #6699cc8b
 }
+
+
 .title{
       font-size: 22px;
       font-weight: bold;
@@ -52,7 +54,7 @@ tr:nth-of-type(2n){
       font-weight: bold;
 }
 .header {
-      fill: aliceblue;
+      fill: lightgrey;
       stroke: #fff;
       stroke-width: 2px;
       cursor: pointer;
@@ -130,7 +132,7 @@ tr:nth-of-type(2n){
       position: relative;
       width: 500px;
       font: 18px sans-serif;   
-      background: grey; 
+      background: rgb(194, 194, 194); 
       border: 0px;   
 }
 
