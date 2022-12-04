@@ -2,7 +2,7 @@ const CELL_HEIGHT = 20;
 const SIZE_DICT = {
   pop: 65,
   track: 500,
-  attribute: 65,
+  attribute: 125,
   camelot: 65
 };
 
@@ -12,16 +12,7 @@ class ListChart {
   constructor(globalApplicationState, yVar) {
     this.globalApplicationState = globalApplicationState;
     this.data = globalApplicationState.data;
-    this.yV = d3.select("#yAxis").property("value");
-
-    this.header = [
-      { name: "Pop.", key: "pop" },
-      { name: "Track", key: "track" },
-     // { name: "Artist", key: "artist" },
-      { name: this.yV, key: "attribute" },
-      { name: "Camelot", key: "camelot"},
-    ];
-   
+    this.yV = d3.select("#yAxis").property("value");   
   
     this.table = d3.select("#table");
     this.tableBody = d3.select("#tbody");
@@ -217,7 +208,7 @@ class ListChart {
       { name: "Track", key: "track" },
       //{ name: "Artist", key: "artist" },
       { name: this.yV, key: "attribute" },
-      { name: "Camelot", key: "camelot"}
+      { name: "Cam.", key: "camelot"}
     ];
 
     d3.select("#theader")
@@ -225,7 +216,12 @@ class ListChart {
       .data(this.header)
       .join("text")
       .attr("class", "header-text")
-      .text((d) => d.name)
+      .text((d) => //d.name
+      `${d.name}
+      ${this.sortKeyword.includes(d.key) ?
+          `${this.sortAscend ? '⬆' : '⬇'}`
+          : ''}`
+      )
       .style("text-anchor", "middle")
       .style("font-weight", "900")
       .attr("transform", (d) => {

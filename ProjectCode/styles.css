@@ -30,10 +30,11 @@
 #heatmap{
     display:flex;
     justify-content: center;
+
 }
 
 tr:nth-of-type(2n){
-      /* background-color: lightgrey; */
+      background-color: lightgrey;
 }
 .title{
       font-size: 24px;
@@ -41,7 +42,7 @@ tr:nth-of-type(2n){
       text-anchor: middle;
 }
 .legend{
-      font-size: 10.5px;
+      font-size: 16px;
       text-anchor: middle;
 }
 .reset{
@@ -69,6 +70,18 @@ tr:nth-of-type(2n){
       fill: white;
       visibility: hidden;
 }
+.tooltip{
+      position: absolute;
+      text-align: center;
+      min-width: 50px;
+      min-height: 28px;
+      padding: 5px;
+      font: 16px sans-serif;  
+      background: rgba(241, 241, 241, 0.9);
+      stroke: gray;
+      border-radius: 8px;
+      pointer-events: none;
+}
 #tooltiptext{
       position: absolute;
       text-anchor: middle;
@@ -77,6 +90,10 @@ tr:nth-of-type(2n){
       visibility: hidden;
       fill: black
       
+}
+
+.header-text {
+      font: 18px sans-serif;
 }
 
 .infotip {                 

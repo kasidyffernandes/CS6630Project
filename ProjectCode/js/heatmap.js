@@ -208,8 +208,6 @@ class HeatMap {
       .select("#three")
       .append("div")
       .attr("class", "tooltip")
-      .style("background-color", "lightgrey")
-      .style("position", "absolute")
       .style("visibility", "hidden");
 
     let mappedData = this.mapData(selection);

@@ -218,8 +218,6 @@ class MainGraph {
       .select("#one")
       .append("div")
       .attr("class", "tooltip")
-      .style("background-color", "lightgrey")
-      .style("position", "absolute")
       .style("visibility", "hidden");
     let brush = d3
       .brush()
