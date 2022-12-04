@@ -22,7 +22,7 @@ class MainGraph {
       .attr("class", "title")
       .attr("transform", "translate(400,0)")
       .attr("text-anchor", "middle")
-      .text("Top Song 2022");
+      .text("Top Songs of 2022");
 
     this.main
       .append("text")
