@@ -28,7 +28,7 @@ class MainGraph {
       .append("text")
       .attr("transform", "translate(" + width / 2 + ",400)")
       .attr("text-anchor", "middle")
-      .text("Popularity Score");
+      .text("Popularity Score").style('font-weight', 'bold')
     this.colorScale = function (d) {
       let object = {};
       this.result = [];
@@ -207,7 +207,7 @@ class MainGraph {
       .attr("dy", "1em")
       .attr("text-anchor", "middle")
       .text(yVar) 
-      .style('text-transform', 'capitalize');
+      .style('text-transform', 'capitalize').style('font-weight', 'bold')
 
     this.main
       .append("g")

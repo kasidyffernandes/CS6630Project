@@ -9,11 +9,14 @@
 </head>
 <body style="background-color:rgba(240, 240, 240, 0.624)">
     <div id="header" style="font-family:sans-serif;">
-        <header>
-            <h1 style="text-align:center;">Top Songs of 2022 Explorer from <span class=spotify-text> Spotify </span> and <span class=tiktok-text>TikTok</span></h1>
-            <div>Select song attribue here:<div>
-        </header>
+        <section class='header'>
+            <h1 class='pagetitle'>2022 Song Explorer</h1>
+            <h2 class="subtitle" style="text-align:center;">Explore audio charateristics of the top songs from <span class=spotify-text> Spotify </span> and <span class=tiktok-text>TikTok</span></h2>
+            <a class="btn-bgstroke" href="FinalProcessBook.pdf" target="_blank">Process Book</a>
+            <a class="btn-bgstroke" href="https://www.youtube.com/watch?v=F2Yyh1KGpdY">Demo Video</a>
+        </section>
     </div>
+    <div>Select song attribue here:</div>
     <select name="yAxis" id="yAxis">
         <option value="acousticness">Acoustincness</option>
         <option value="danceability">Danceability</option>
@@ -35,7 +38,7 @@
             <label>Dual</label>
         </div>
         <div id="three">
-            <p>Heatmap of attributes for the Top 25 song in the current selection.  Arranged by sorting order from the table.  <span class="attribute-text">Attributes in green</span> are values from 0-1 and are determined from the analysis of the songs themselves while the <span class="discrete-text">discrete values in blue</span> include the bpm, loudness in dB and song length.</p>
+            <p>Heatmap of attributes for the Top 25 song in the current selection.  Arranged by sorting order from the table. <br> <span class="attribute-text">Attributes in green</span> are values from 0-1 and are determined from the analysis of the songs themselves <br> while the <span class="discrete-text">discrete values in blue</span> include the bpm, loudness in dB and song length.</p>
             <div id="heatmap"></div>
         </div>
         
