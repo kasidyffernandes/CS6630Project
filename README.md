@@ -1,7 +1,7 @@
 # 2022 Song Explorer
 
 ## Webpage
-Visit our 2022 Song Explorer [here] (https://kasidyffernandes.github.io/project)
+Visit our 2022 Song Explorer [here](https://kasidyffernandes.github.io/project)
 
 ## Demo Video
 Watch our demo video [here](https://www.youtube.com/watch?v=F2Yyh1KGpdY)
